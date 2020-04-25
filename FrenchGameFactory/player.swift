@@ -15,6 +15,10 @@ class Player {
         self.characters = []
     }
 
+    func play(against opponent: Player) {
+        
+    }
+
     func addCharacter(_ character: Character) {
         characters.append(character)
     }

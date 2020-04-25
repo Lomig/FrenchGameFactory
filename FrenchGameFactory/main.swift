@@ -8,10 +8,10 @@
 
 import Foundation
 
-let player1 = Player()
-player1.addCharacter(Character(name: "Truc"))
-player1.addCharacter(Character(name: "Bidule"))
-print(player1.isCharacterNameTaken("Truc"))
-print(player1.isCharacterNameTaken("Bidule"))
-print(player1.isCharacterNameTaken("Machin"))
+let game = Game()
+game.addPlayer("Player 1")
+game.addPlayer("Player 2")
+
+game.start()
+
 
