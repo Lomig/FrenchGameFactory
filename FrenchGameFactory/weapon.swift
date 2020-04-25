@@ -58,7 +58,7 @@ class Weapon {
     init(min_damage: Int = 0) {
         // User story: Randomness is a required characteristic
         // The damage from a weapon is random (1 — 5 damage above the previous one)
-        self.damage = Int.random(in: min_damage + 1 ... 5)
+        self.damage = Int.random(in: min_damage + 1 ... min_damage + 5)
         
         // Let's have some funny weapon names!
         self.name = "\(Weapon.weaponPrefix.randomElement()!) \(Weapon.weaponNames.randomElement()!)\(Weapon.weaponSuffix.randomElement()!)"
