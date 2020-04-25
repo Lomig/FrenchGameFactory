@@ -12,3 +12,6 @@ let weapon = Weapon()
 print(weapon.name)
 print(weapon.damage)
 
+let character = Character(name: "Truc")
+print(character.name)
+print(character.currentHitPoints)
