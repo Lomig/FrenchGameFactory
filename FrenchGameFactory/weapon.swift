@@ -10,27 +10,57 @@ import Foundation
 
 class Weapon {
     static let weaponNames = [
-        "Sword",
-        "Axe",
-        "Shovel",
-        "Bow",
-        "Mace",
-        "Spear"
+        "sword",
+        "axe",
+        "shovel",
+        "bow",
+        "mace",
+        "spear",
+        "fork",
+        "shoe",
+        "smelly cheese",
+        "ruler",
     ]
-    static let weaponQualifiers = [
-        "of the mighty",
-        "of the beast",
-        "of the devot",
-        "with deadly spikes",
-        "that may be magical",
-        "you cannot parry"
+    static let weaponPrefix = [
+        "Rusty",
+        "Golden",
+        "Devilish",
+        "Almighty",
+        "Not-so-impressive",
+        "Hungry",
+        "Sexy",
+        "Warm",
+        "Soft",
+        "Pink",
+        "Average",
+        "Borrowed",
+        "Quarantined",
+    ]
+    static let weaponSuffix = [
+        " of the mighty",
+        " of the beast",
+        " of the devot",
+        " with deadly spikes",
+        " that may be magical",
+        " you cannot parry",
+        " from last Christmas",
+        " everyone desire",
+        ", vanquisher of the Battle of Markravelt",
+        " stolen from a lonely school teacher",
     ]
     
     let name: String
     let damage: Int
     
+    // User story: Chests with upgraded weapons
+    // We must be able to create weapons that are better than a previous one
+    // We can then initialize a weapon with a minimum damage number
     init(min_damage: Int = 0) {
+        // User story: Randomness is a required characteristic
+        // The damage from a weapon is random (1 — 5 damage above the previous one)
         self.damage = Int.random(in: min_damage + 1 ... 5)
-        self.name = "\(Weapon.weaponNames.randomElement()!) \(Weapon.weaponQualifiers.randomElement()!)"
+        
+        // Let's have some funny weapon names!
+        self.name = "\(Weapon.weaponPrefix.randomElement()!) \(Weapon.weaponNames.randomElement()!)\(Weapon.weaponSuffix.randomElement()!)"
     }
 }
