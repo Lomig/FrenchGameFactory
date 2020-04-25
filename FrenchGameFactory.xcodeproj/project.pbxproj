@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9E5F921324547EBC005A31CE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921224547EBC005A31CE /* main.swift */; };
+		9E5F921A24547F00005A31CE /* weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921924547F00005A31CE /* weapon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		9E5F920F24547EBC005A31CE /* FrenchGameFactory */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = FrenchGameFactory; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E5F921224547EBC005A31CE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		9E5F921924547F00005A31CE /* weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weapon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +60,7 @@
 			isa = PBXGroup;
 			children = (
 				9E5F921224547EBC005A31CE /* main.swift */,
+				9E5F921924547F00005A31CE /* weapon.swift */,
 			);
 			path = FrenchGameFactory;
 			sourceTree = "<group>";
@@ -121,6 +124,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E5F921324547EBC005A31CE /* main.swift in Sources */,
+				9E5F921A24547F00005A31CE /* weapon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

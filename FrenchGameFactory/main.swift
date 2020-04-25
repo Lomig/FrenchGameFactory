@@ -8,5 +8,7 @@
 
 import Foundation
 
-print("Hello, World!")
+let weapon = Weapon()
+print(weapon.name)
+print(weapon.damage)
 
