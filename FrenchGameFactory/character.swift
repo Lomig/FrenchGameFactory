@@ -19,4 +19,16 @@ class Character {
         self.currentHitPoints = self.maxHitPoints
         self.weapon = Weapon()
     }
+    
+    func attack(_ opponent: Character) {
+        opponent.takeDamage(from: self.weapon)
+    }
+    
+    func takeDamage(from weapon: Weapon) {
+        if weapon.damage >= self.currentHitPoints {
+            return self.currentHitPoints = 0
+        }
+        
+        self.currentHitPoints -= weapon.damage
+    }
 }

@@ -8,10 +8,13 @@
 
 import Foundation
 
-let weapon = Weapon()
-print(weapon.name)
-print(weapon.damage)
+let weapon = Weapon(min_damage: 20)
 
-let character = Character(name: "Truc")
-print(character.name)
-print(character.currentHitPoints)
+let character1 = Character(name: "Player1")
+let character2 = Character(name: "Player2")
+
+character1.attack(character2)
+print("\(character2.currentHitPoints) / \(character2.maxHitPoints)")
+let array = [character1, character2]
+array[1].attack(array[0])
+print("\(character1.currentHitPoints) / \(character1.maxHitPoints)")
