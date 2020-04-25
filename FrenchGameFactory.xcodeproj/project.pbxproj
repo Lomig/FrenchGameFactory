@@ -10,6 +10,7 @@
 		9E5F921324547EBC005A31CE /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921224547EBC005A31CE /* main.swift */; };
 		9E5F921A24547F00005A31CE /* weapon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921924547F00005A31CE /* weapon.swift */; };
 		9E5F921C2454897F005A31CE /* character.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921B2454897F005A31CE /* character.swift */; };
+		9E5F921E2454965E005A31CE /* player.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E5F921D2454965E005A31CE /* player.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -29,6 +30,7 @@
 		9E5F921224547EBC005A31CE /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		9E5F921924547F00005A31CE /* weapon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = weapon.swift; sourceTree = "<group>"; };
 		9E5F921B2454897F005A31CE /* character.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = character.swift; sourceTree = "<group>"; };
+		9E5F921D2454965E005A31CE /* player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = player.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +66,7 @@
 				9E5F921224547EBC005A31CE /* main.swift */,
 				9E5F921924547F00005A31CE /* weapon.swift */,
 				9E5F921B2454897F005A31CE /* character.swift */,
+				9E5F921D2454965E005A31CE /* player.swift */,
 			);
 			path = FrenchGameFactory;
 			sourceTree = "<group>";
@@ -126,6 +129,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E5F921E2454965E005A31CE /* player.swift in Sources */,
 				9E5F921C2454897F005A31CE /* character.swift in Sources */,
 				9E5F921324547EBC005A31CE /* main.swift in Sources */,
 				9E5F921A24547F00005A31CE /* weapon.swift in Sources */,

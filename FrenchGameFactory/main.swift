@@ -8,16 +8,10 @@
 
 import Foundation
 
-let weapon = Weapon(min_damage: 80)
+let player1 = Player()
+player1.addCharacter(Character(name: "Truc"))
+player1.addCharacter(Character(name: "Bidule"))
+print(player1.isCharacterNameTaken("Truc"))
+print(player1.isCharacterNameTaken("Bidule"))
+print(player1.isCharacterNameTaken("Machin"))
 
-let character1 = Character(name: "Player1")
-let character2 = Character(name: "Player2")
-
-character1.attack(character2)
-print(character2.status)
-let array = [character1, character2]
-array[1].attack(array[0])
-print(character1.status)
-
-character1.takeDamage(from: weapon)
-print(character1.status)
