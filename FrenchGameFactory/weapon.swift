@@ -48,10 +48,10 @@ class Weapon {
         ", vanquisher of the Battle of Markravelt",
         " stolen from a lonely school teacher",
     ]
-    
+
     let name: String
     let damage: Int
-    
+
     // User story: Chests with upgraded weapons
     // We must be able to create weapons that are better than a previous one
     // We can then initialize a weapon with a minimum damage number
@@ -67,7 +67,7 @@ class Weapon {
             // The damage from a weapon is random (1 — 5 damage above the previous one)
             self.damage = Int.random(in: min_damage + 1 ... min_damage + 5)
         }
-        
+
         // Let's have some funny weapon names!
         self.name = "\(Weapon.weaponPrefix.randomElement()!) \(Weapon.weaponNames.randomElement()!)\(Weapon.weaponSuffix.randomElement()!)"
     }
