@@ -26,7 +26,7 @@ class Game {
 
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
-        let newPlayer = Player()
+        let newPlayer = Player(name: playerName)
         players.append(newPlayer)
         print("\n\(playerName), enter the name of your three heroes!")
 

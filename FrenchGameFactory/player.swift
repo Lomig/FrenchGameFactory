@@ -9,14 +9,41 @@
 import Foundation
 
 class Player {
-    var characters: [Character]
+    var name: String
+    var characters: [Character] = []
 
-    init() {
-        self.characters = []
+    init(name: String) {
+        self.name = name
     }
 
     func play(against opponent: Player) {
-        
+        printStatus()
+        opponent.printStatus()
+
+        let attacker = chooseCharacter(who: "attack")
+        let target = opponent.chooseCharacter(who: "will be attacked")
+        attacker.attack(target)
+    }
+
+    func printStatus() {
+        print(name)
+        for (index, character) in characters.enumerated() {
+            print("\(index) - \(character.status)")
+        }
+        print("\n")
+    }
+
+    func chooseCharacter(who action: String) -> Character {
+        print("Please chose the character who will \(action):")
+        print(" > ", terminator: " ")
+        if let chosenValue = Int(readLine(strippingNewline: true)!) {
+            if chosenValue >= 0 && chosenValue < characters.count {
+                return characters[chosenValue]
+            }
+        }
+
+        print("Wrong selection!")
+        return chooseCharacter(who:action)
     }
 
     func addCharacter(_ character: Character) {
