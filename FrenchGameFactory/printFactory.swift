@@ -136,8 +136,33 @@ class PrintFactory {
         """)
     }
 
-    private func resetDisplay() {
+    private func treasureChest() {
+        print("""
+         \\/ /\\ \\  \(lines[0])  / /\\/ /
+         / /\\/ /  \(lines[1])  \\ \\/ /\\
+        / /\\ \\/      __________      \(lines[2])   \\ \\/\\ \\
+        \\ \\/\\ \\     /\\____;;___\\     \(lines[3])   /\\ \\/ /
+         \\/ /\\ \\   | /         /     \(lines[4])  / /\\/ /
+         / /\\/ /   `. ())oo() .      \(lines[5])  \\ \\/ /\\
+        / /\\ \\/     |\\(%()*^^()^\\    \(lines[6])   \\ \\/\\ \\
+        \\ \\/\\ \\    %| |-%-------|    \(lines[7])   /\\ \\/ /
+         \\/ /\\ \\  % \\ | %  ))   |    \(lines[8])  / /\\/ /
+         / /\\/ /  %  \\|%________|    \(lines[9])  \\ \\/ /\\
+        / /\\ \\/    %%%%              \(lines[10])   \\ \\/\\ \\
+        \\ \\/\\ \\   \(lines[11])   /\\ \\/ /
+         \\/ /\\ \\  \(lines[12])  / /\\/ /
+         / /\\/ /  \(lines[13])  \\ \\/ /\\
+        """)
+    }
+
+    private func resetDisplay(display: String = "Normal") {
         lines = Array(repeating: String(repeating: " ", count: 58), count: 14)
+
+        if display == "Chest" {
+            for i in 2...10 {
+                lines[i] = String(repeating: " ", count: 39)
+            }
+        }
     }
 
     private func clearScreen() {
