@@ -16,21 +16,23 @@ class Player {
         self.name = name
     }
 
+    var status: [String] {
+        var array = Array(repeating: "", count: 4)
+
+        array[0] = name
+
+        for (index, character) in characters.enumerated() {
+            array[index + 1] = "\(index + 1) \(character.status)"
+        }
+
+        return array
+    }
+
     func play(against opponent: Player) {
-        printStatus()
-        opponent.printStatus()
 
         let attacker = chooseCharacter(who: "attack")
         let target = opponent.chooseCharacter(who: "will be attacked")
         attacker.attack(target)
-    }
-
-    func printStatus() {
-        print(name)
-        for (index, character) in characters.enumerated() {
-            print("\(index) - \(character.status)")
-        }
-        print("\n")
     }
 
     func chooseCharacter(who action: String) -> Character {

@@ -13,6 +13,22 @@ class Game {
     var playerTurn: PlayerTurn = .player1
     var gameOver = false
 
+    var printFactory: PrintFactory = PrintFactory()
+
+    init() {
+        self.printFactory = PrintFactory(game: self)
+    }
+
+    var status: [[String]] {
+        var array = Array(repeating: Array(repeating: "", count: 4), count: 2)
+
+        for (index, player) in players.enumerated() {
+            array[index] = player.status
+        }
+
+        return array
+    }
+
     // Main Gameplay Loop
     func start() {
         repeat {
@@ -28,12 +44,11 @@ class Game {
     func addPlayer(_ playerName: String) {
         let newPlayer = Player(name: playerName)
         players.append(newPlayer)
-        print("\n\(playerName), enter the name of your three heroes!")
 
         for i in 1 ... 3 {
             var heroName: String
             repeat {
-                heroName = selectCharacterName(forHero: i)
+                heroName = selectCharacterName(forHero: i, withTitle: "\(playerName)'s team")
             } while heroName == "" || isCharacterNameTaken(heroName)
 
             newPlayer.addCharacter(Character(name: heroName))
@@ -42,10 +57,9 @@ class Game {
 
     // Get a Character Name from the player
     // Check if this name is already in use
-    private func selectCharacterName(forHero i: Int) -> String {
+    private func selectCharacterName(forHero i: Int, withTitle title: String) -> String {
         var heroName = ""
-        print("Please enter the name for your hero #\(i):")
-        print(" >", terminator: " ")
+        printFactory.askUser(title: title, question: "Enter the name for your hero #\(i)", statusLeft: status.first!, statusRight: status.last!)
 
         if let input = readLine(strippingNewline: true) {
             heroName = input
