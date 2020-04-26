@@ -10,7 +10,6 @@ import Foundation
 
 class PrintFactory {
     private var lines: [String] = []
-    private var cursorSaved: Bool = false
     private var title: String = "FrenchGameFactory RPG"
     private let game: Game?
 
@@ -33,7 +32,6 @@ class PrintFactory {
         header()
         innerText()
         footer()
-        restoreCursor()
     }
 
     private func updateTitle(with title: String) {
@@ -51,8 +49,8 @@ class PrintFactory {
     }
 
     private func updateQuestion(with question: String) {
-        lines[10] = chooseColor(for: spaceAfter(question))
-        lines[11] = spaceAfter("> \(saveCursor())")
+        lines[12] = chooseColor(for: spaceAfter(question))
+        lines[13] = spaceAfter(">")
     }
 
     private func centerLine(_ line: String) -> String {
@@ -103,12 +101,14 @@ class PrintFactory {
         \\ \\/\\ \\   \(lines[3])   /\\ \\/ /
          \\/ /\\ \\  \(lines[4])  / /\\/ /
          / /\\/ /  \(lines[5])  \\ \\/ /\\
-         \\/ /\\ \\  \(lines[6])  / /\\/ /
-         / /\\/ /  \(lines[7])  \\ \\/ /\\
-        / /\\ \\/   \(lines[8])   \\ \\/\\ \\
-        \\ \\/\\ \\   \(lines[9])   /\\ \\/ /
-         \\/ /\\ \\  \(lines[10])  / /\\/ /
-         / /\\/ /  \(lines[11])    \\ \\/ /\\
+        / /\\ \\/   \(lines[6])   \\ \\/\\ \\
+        \\ \\/\\ \\   \(lines[7])   /\\ \\/ /
+         \\/ /\\ \\  \(lines[8])  / /\\/ /
+         / /\\/ /  \(lines[9])  \\ \\/ /\\
+        / /\\ \\/   \(lines[10])   \\ \\/\\ \\
+        \\ \\/\\ \\   \(lines[11])   /\\ \\/ /
+         \\/ /\\ \\  \(lines[12])  / /\\/ /
+         / /\\/ /  \(lines[13])  \\ \\/ /\\
         """)
     }
 
@@ -137,21 +137,18 @@ class PrintFactory {
     }
 
     private func resetDisplay() {
-        lines = Array(repeating: String(repeating: " ", count: 58), count: 12)
+        lines = Array(repeating: String(repeating: " ", count: 58), count: 14)
     }
 
     private func clearScreen() {
+        // Clear Screen
         print("\u{1B}[2J", terminator: "")
+        // Position the cursor on the second line, first column
+        print("\u{1B}[2;1H", terminator: "")
     }
 
-    private func saveCursor() -> String {
-        if cursorSaved { return "" }
-
-        cursorSaved = true
-        return "\u{1B}7"
-    }
-
-    private func restoreCursor() {
-        print("\u{1B}8", terminator: "")
+    private func cursorToPosition() {
+        // Position the cursor on the right line for user's input
+        print("\u{1B}[22;13H", terminator: "")
     }
 }
