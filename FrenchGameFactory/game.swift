@@ -34,7 +34,7 @@ class Game {
         repeat {
             let attackerID = playerTurn.rawValue
             let defenderID = (playerTurn.rawValue + 1) % 2
-            players[attackerID].play(against: players[defenderID])
+            players[attackerID].play(against: players[defenderID], displayOn: printFactory, withStatus: status)
 
             playerTurn.toggle()
         } while !gameOver

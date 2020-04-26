@@ -28,24 +28,25 @@ class Player {
         return array
     }
 
-    func play(against opponent: Player) {
+    func play(against opponent: Player, displayOn printFactory: PrintFactory, withStatus status: [[String]]) {
 
-        let attacker = chooseCharacter(who: "attack")
-        let target = opponent.chooseCharacter(who: "will be attacked")
+        let attacker = chooseCharacter(attackBy: self, role: "attacker", displayOn: printFactory, withStatus: status)
+        let target = opponent.chooseCharacter(attackBy: self, role: "target", displayOn: printFactory, withStatus: status)
         attacker.attack(target)
     }
 
-    func chooseCharacter(who action: String) -> Character {
-        print("Please chose the character who will \(action):")
-        print(" > ", terminator: " ")
+    func chooseCharacter(attackBy player: Player,
+                         role: String,
+                         displayOn printFactory: PrintFactory,
+                         withStatus status: [[String]]) -> Character {
+        printFactory.askUser(title: "\(player.name) is attacking!", question: "Choose your \(role)", statusLeft: status.first!, statusRight: status.last!)
+
         if let chosenValue = Int(readLine(strippingNewline: true)!) {
-            if chosenValue >= 0 && chosenValue < characters.count {
-                return characters[chosenValue]
+            if chosenValue > 0 && chosenValue <= characters.count {
+                return characters[chosenValue - 1]
             }
         }
-
-        print("Wrong selection!")
-        return chooseCharacter(who:action)
+        return chooseCharacter(attackBy: player, role: role, displayOn: printFactory, withStatus: status)
     }
 
     func addCharacter(_ character: Character) {

@@ -32,6 +32,7 @@ class PrintFactory {
         header()
         innerText()
         footer()
+        cursorToPosition()
     }
 
     private func updateTitle(with title: String) {

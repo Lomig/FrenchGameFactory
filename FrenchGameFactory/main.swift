@@ -12,7 +12,7 @@ let game = Game()
 
 game.addPlayer("Player 1")
 game.addPlayer("Player 2")
-// game.start()
+game.start()
 
 
 // Return gracefullt the cursor bottom left of the screen
