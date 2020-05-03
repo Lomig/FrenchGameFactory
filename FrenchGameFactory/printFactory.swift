@@ -12,6 +12,7 @@ class PrintFactory {
 
     var currentPlayer: PlayerTurn = .player1
     private var lines: [String] = Array(repeating: String(repeating: " ", count: 58), count: 15)
+    private var backupLines : [String] = []
     private var players: [String] = Array(repeating: String(repeating: " ", count: 27), count: 2)
     private var characters: [[String]] = Array(repeating: Array(repeating: String(repeating: " ", count: 27), count: 3), count: 2)
 
@@ -43,8 +44,8 @@ class PrintFactory {
     func askUser(_ something: Bool) {
         if something { return }
 
-        lines[13] = padLine("", fullLine: true)
-        lines[14] = padLine("", fullLine: true)
+        lines[13] = padLine("", lineType: .fullLine)
+        lines[14] = padLine("", lineType: .fullLine)
 
         display()
     }
@@ -117,6 +118,43 @@ class PrintFactory {
         display()
     }
 
+    func openChest(for characterName: String, content: [String]) {
+        setChestDisplay()
+        updateTitle(with: "\(characterName) found a treasure!", color: .yellow)
+
+        lines[3] = padLine("Woot!", lineType: .treasureLine)
+        lines[4] = padLine("\(characterName) found a treasure!", lineType: .treasureLine)
+
+        let cutName = cut(content[0], lineType: .treasureLine)
+        lines[6] = colorString(padLine(cutName[0], lineType: .treasureLine), color: .red)
+        lines[7] = colorString(padLine(cutName[1], lineType: .treasureLine), color: .red)
+
+        lines[9] = padLine("(Damage: \(content[1]))", lineType: .treasureLine)
+
+        let cutComparison = cut(content[2], lineType: .fullLine)
+        lines[11] = padLine(cutComparison[0], lineType: .fullLine)
+        lines[12] = padLine(cutComparison[1], lineType: .fullLine)
+
+        lines[14] = colorString(padLine("Do you want to replace it (Yes / No)?", lineType: .fullLine), color: .green)
+    }
+
+    func displayChest(retry: Bool = false) {
+        if retry {
+            lines[14] = colorString(padLine("I don't understand; Yes or No?", lineType: .fullLine), color: .green)
+        }
+
+        clearScreen()
+        header()
+        treasureChest()
+        footer()
+        cursorToPosition(forTreasureDisplay: true)
+    }
+
+    func closeChest() {
+        lines = backupLines
+        display()
+    }
+
     //---------------------------------------------------------------------------
     //
     //   PRIVATE FUNCTIONS
@@ -154,16 +192,28 @@ class PrintFactory {
         description.forEach { line in
             lines[9] = lines[10]
             lines[10] = lines[11]
-            lines[11] = padLine(line, fullLine: true)
+            lines[11] = padLine(line, lineType: .fullLine)
         }
     }
 
     // Update the Question Section
     private func updateQuestion(with question: String, color: Color) {
-        lines[13] = colorString(padLine(question, fullLine: true), color: color)
-        lines[14] = padLine(">", fullLine: true)
+        lines[13] = colorString(padLine(question, lineType: .fullLine), color: color)
+        lines[14] = padLine(">", lineType: .fullLine)
     }
 
+    private func setChestDisplay() {
+        backupLines = lines
+        resetDisplayLinesForChest()
+    }
+
+    private func resetDisplayLinesForChest() {
+        lines = Array(repeating: String(repeating: " ", count: 58), count: 15)
+
+        (1...9).forEach { i in
+            lines[i] = String(repeating: " ", count: 39)
+        }
+    }
 
     //---------------------------------------------------------------------------
     //
@@ -172,11 +222,21 @@ class PrintFactory {
     //---------------------------------------------------------------------------
 
 
+    private func cut(_ string: String, lineType: LineType) -> [String] {
+        if string.count <= lineType.rawValue { return [string, ""] }
 
-    private func padLine(_ line: String, fullLine: Bool = false) -> String {
-        let padding = fullLine ? 58 : 27
+        let lastSpaceOffset = (1...lineType.rawValue).reversed().first { offset in
+            let index: String.Index = string.index(string.startIndex, offsetBy: offset)
+            return string[index...index] == " "
+        }
 
-        return line.padding(toLength: padding, withPad: " ", startingAt: 0)
+        let lastSpaceIndex: String.Index = string.index(string.startIndex, offsetBy: lastSpaceOffset! + 1)
+
+        return [String(string[..<lastSpaceIndex]), String(string[lastSpaceIndex...])]
+    }
+
+    private func padLine(_ line: String, lineType: LineType = .halfLine) -> String {
+        return line.padding(toLength: lineType.rawValue, withPad: " ", startingAt: 0)
     }
 
     private func centerLine(_ line: String) -> String {
@@ -237,20 +297,20 @@ class PrintFactory {
     private func treasureChest() {
         print("""
          \\/ /\\ \\  \(lines[0])  / /\\/ /
-         / /\\/ /  \(lines[1])  \\ \\/ /\\
-        / /\\ \\/      __________      \(lines[2])   \\ \\/\\ \\
-        \\ \\/\\ \\     /\\____;;___\\     \(lines[3])   /\\ \\/ /
-         \\/ /\\ \\   | /         /     \(lines[4])  / /\\/ /
-         / /\\/ /   `. ())oo() .      \(lines[5])  \\ \\/ /\\
-        / /\\ \\/     |\\(%()*^^()^\\    \(lines[6])   \\ \\/\\ \\
-        \\ \\/\\ \\    %| |-%-------|    \(lines[7])   /\\ \\/ /
-         \\/ /\\ \\  % \\ | %  ))   |    \(lines[8])  / /\\/ /
-         / /\\/ /  %  \\|%________|    \(lines[9])  \\ \\/ /\\
-        / /\\ \\/    %%%%              \(lines[10])   \\ \\/\\ \\
+         / /\\/ /     __________      \(lines[1])  \\ \\/ /\\
+        / /\\ \\/     /\\____;;___\\     \(lines[2])   \\ \\/\\ \\
+        \\ \\/\\ \\    | /         /     \(lines[3])   /\\ \\/ /
+         \\/ /\\ \\   `. ())oo() .      \(lines[4])  / /\\/ /
+         / /\\/ /    |\\(%()*^^()^\\    \(lines[5])  \\ \\/ /\\
+        / /\\ \\/    %| |-%-------|    \(lines[6])   \\ \\/\\ \\
+        \\ \\/\\ \\   % \\ | %  ))   |    \(lines[7])   /\\ \\/ /
+         \\/ /\\ \\  %  \\|%________|    \(lines[8])  / /\\/ /
+         / /\\/ /   %%%%              \(lines[9])  \\ \\/ /\\
+        / /\\ \\/   \(lines[10])   \\ \\/\\ \\
         \\ \\/\\ \\   \(lines[11])   /\\ \\/ /
          \\/ /\\ \\  \(lines[12])  / /\\/ /
          / /\\/ /  \(lines[13])  \\ \\/ /\\
-        / /\\ \\/   \(lines[14])  \\ \\/\\ \\
+        / /\\ \\/   \(lines[14])   \\ \\/\\ \\
         """)
     }
 
@@ -261,16 +321,26 @@ class PrintFactory {
         print("\u{1B}[2;1H", terminator: "")
     }
 
-    private func cursorToPosition() {
-        // Position the cursor on the right line for user's input
+    // Position the cursor on the right line for user's input
+    private func cursorToPosition(forTreasureDisplay treasureDisplay: Bool = false) {
+        if treasureDisplay { return print("\u{1B}[23;50H", terminator: "") }
+
         print("\u{1B}[23;13H", terminator: "")
     }
 }
 
 enum Color: String {
-    case red = "\u{001B}[91m"
+    case green = "\u{001B}[32m"
+    case yellow = "\u{001B}[33m"
     case blue = "\u{001B}[34m"
     case purple = "\u{001B}[35m"
-    case yellow = "\u{001B}[33m"
     case white = "\u{001B}[37m"
+    case red = "\u{001B}[91m"
+
+}
+
+enum LineType: Int {
+    case halfLine = 27
+    case treasureLine = 39
+    case fullLine = 58
 }

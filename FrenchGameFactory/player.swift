@@ -33,6 +33,11 @@ class Player {
         // Choose a target to play against
         let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: "target")
         attacker.attack(target)
+
+        // The attacker may find a crate
+        // 40% probability for now
+        let isCrate = Int.random(in: 1...100)
+        if isCrate <= 40 { attacker.getCrate() }
     }
 
     // Choose character from the User input.

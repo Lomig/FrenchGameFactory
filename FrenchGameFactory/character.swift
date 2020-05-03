@@ -30,7 +30,7 @@ class Character {
     }
 
     func attack(_ opponent: Character) {
-        opponent.takeDamage(from: self.weapon)
+        opponent.takeDamage(from: weapon)
         updateStatus(isHighlighted: false)
     }
 
@@ -46,6 +46,43 @@ class Character {
         }
 
         updateStatus()
+    }
+
+    func getCrate() {
+        let newWeapon = Weapon(min_damage: weapon.damage)
+        let newWeaponDescription: String = "It's a \(newWeapon.name.capitalized)!"
+        let comparison: String
+
+        if weapon.damage < newWeapon.damage {
+            comparison = "It's better than your \(weapon.name.capitalized)!"
+        } else if weapon.damage > newWeapon.damage {
+            comparison = "It's no better than your \(weapon.name.capitalized)..."
+        } else {
+            comparison = "Frankly? I cannot see the difference with your \(weapon.name.capitalized)..."
+        }
+
+        PrintFactory.shared.openChest(for: name, content: [newWeaponDescription, String(newWeapon.damage), comparison])
+        PrintFactory.shared.displayChest()
+        tradeWeapon(with: newWeapon)
+    }
+
+    func tradeWeapon(with weapon: Weapon) {
+        if let confirmation = readLine(strippingNewline: true) {
+            if ["yes", "y"].contains(confirmation.lowercased()) {
+                self.weapon = weapon
+                PrintFactory.shared.closeChest()
+                PrintFactory.shared.informUser(description: ["\(name) found a treasure...", "\(name) has changed his weapon!"])
+                updateStatus()
+                return
+            } else if ["no", "n"].contains(confirmation.lowercased()){
+                PrintFactory.shared.closeChest()
+                PrintFactory.shared.informUser(description: ["\(name) found a treasure...", "\(name) left the treasure behind."])
+                return
+            }
+
+        }
+        PrintFactory.shared.displayChest(retry: true)
+        tradeWeapon(with: weapon)
     }
 
     // Print the character characteristics
