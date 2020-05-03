@@ -11,28 +11,36 @@ import Foundation
 class PrintFactory {
 
     var currentPlayer: PlayerTurn = .player1
-    private var lines: [String] = []
-    private var players: [String] = []
-    private var characters: [[String]] = [[]]
-    static let shared =  PrintFactory()
+    private var lines: [String] = Array(repeating: String(repeating: " ", count: 58), count: 15)
+    private var players: [String] = Array(repeating: String(repeating: " ", count: 27), count: 2)
+    private var characters: [[String]] = Array(repeating: Array(repeating: String(repeating: " ", count: 27), count: 3), count: 2)
+
+    static  let shared: PrintFactory = PrintFactory()
 
 
-    private init(){
-        resetDisplay()
-    }    
+    // Make the init private to avoid instanciation
+    // We want this class to be a singleton used through PrintFactory.shared
+    private init(){}
 
+    //---------------------------------------------------------------------------
+    //
+    //   PUBLIC INTERFACE
+    //
+    //---------------------------------------------------------------------------
+
+    // Print a question and its prompt at the bottom of the screen.
+    // The question may be colorized to remind the User of the active Team.
     func askUser(question: String, colorize: Bool = false) {
-
         var color = Color.white
         if colorize {
             color = currentPlayer.rawValue == 0 ? .blue : .purple
         }
 
-
         updateQuestion(with: question, color: color)
         display()
     }
 
+    // Print a title at Top, Center of the screen
     func changeTitle(with title: String, colorize: Bool = false) {
         var color = Color.white
         if colorize {
@@ -44,9 +52,10 @@ class PrintFactory {
         display()
     }
 
+    // Print the Team name, in a Status Title Bar
     func showPlayerName(forPlayer playerIndex: Int, name: String) {
         let paddedName = name.padding(toLength: 17, withPad: " ", startingAt: 0)
-        let playerStatus = "\(paddedName) DMG   HIT"
+        let playerStatus = "\(paddedName) DMG    HP"
         let color = playerIndex == 0 ? Color.blue : Color.purple
 
         players[playerIndex] = colorString(padLine(playerStatus), color: color)
@@ -55,6 +64,14 @@ class PrintFactory {
         display()
     }
 
+    // Print a character in the form of:
+    //     INDEX NAME       DAMAGE  HP/TOTAL_HP
+    // A name that is too long will be but
+    // Number have leading 0s
+    // We colorize the line to match the current status:
+    //     - Red if the character is dead
+    //     - Yellow if selected (is attacker waiting for a target)
+    //     - The colour of its team otherwise
     func showCharacter(fromPlayer playerIndex: Int, ofIndex characterIndex: Int, name: String, damage: Int, currentHitPoints: Int, maxHitPoints: Int, isAlive: Bool, isHighlighted: Bool) {
         let id = characterIndex + 1
         let paddedName = name.padding(toLength: 16, withPad: " ", startingAt: 0)
@@ -79,13 +96,27 @@ class PrintFactory {
         display()
     }
 
+    // Add information lines
     func informUser(description: [String]) {
         updateDescription(with: description)
 
         display()
     }
+    func informUser(description: String) {
+        updateDescription(with: [description])
 
-    func display() {
+        display()
+    }
+
+    //---------------------------------------------------------------------------
+    //
+    //   PRIVATE FUNCTIONS
+    //
+    //---------------------------------------------------------------------------
+
+
+    // Display on console the different lines setup beforehand
+    private func display() {
         clearScreen()
         header()
         innerText()
@@ -93,11 +124,12 @@ class PrintFactory {
         cursorToPosition()
     }
 
+    // Change Title Line
     private func updateTitle(with title: String, color: Color) {
         lines[0] = "\u{001B}[1m" + colorString(centerLine(title).uppercased(), color: color)  + "\u{001B}[0m"
     }
 
-    // Update the Status section
+    // Update the Status Section
     // Composed of the player's name, weapon damage, and hit points
     private func updateStatus() {
         lines[3] = players.first! + "    " + players.last!
@@ -107,7 +139,7 @@ class PrintFactory {
         }
     }
 
-    // Update the Description section
+    // Update the Description Section
     // A new description "pushes" former ones up
     private func updateDescription(with description: [String]) {
         description.forEach { line in
@@ -117,10 +149,20 @@ class PrintFactory {
         }
     }
 
+    // Update the Question Section
     private func updateQuestion(with question: String, color: Color) {
         lines[13] = colorString(padLine(question, fullLine: true), color: color)
         lines[14] = padLine(">", fullLine: true)
     }
+
+
+    //---------------------------------------------------------------------------
+    //
+    //   HELPER FUNCTIONS
+    //
+    //---------------------------------------------------------------------------
+
+
 
     private func padLine(_ line: String, fullLine: Bool = false) -> String {
         let padding = fullLine ? 58 : 27
@@ -201,18 +243,6 @@ class PrintFactory {
          / /\\/ /  \(lines[13])  \\ \\/ /\\
         / /\\ \\/   \(lines[14])  \\ \\/\\ \\
         """)
-    }
-
-    private func resetDisplay(display: String = "Normal") {
-        lines = Array(repeating: String(repeating: " ", count: 58), count: 15)
-        players = Array(repeating: String(repeating: " ", count: 27), count: 2)
-        characters = Array(repeating: Array(repeating: String(repeating: " ", count: 27), count: 3), count: 2)
-
-        if display == "Chest" {
-            for i in 2...10 {
-                lines[i] = String(repeating: " ", count: 39)
-            }
-        }
     }
 
     private func clearScreen() {
