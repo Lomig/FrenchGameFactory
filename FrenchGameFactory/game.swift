@@ -13,12 +13,6 @@ class Game {
     var playerTurn: PlayerTurn = .player1
     var gameOver = false
 
-    var printFactory: PrintFactory = PrintFactory()
-
-    init() {
-        self.printFactory = PrintFactory(game: self)
-    }
-
     var status: [[String]] {
         var array = Array(repeating: Array(repeating: "", count: 4), count: 2)
 
@@ -32,9 +26,10 @@ class Game {
     // Main Gameplay Loop
     func start() {
         repeat {
+            PrintFactory.shared.currentPlayer = playerTurn
             let attackerID = playerTurn.rawValue
             let defenderID = (playerTurn.rawValue + 1) % 2
-            players[attackerID].play(against: players[defenderID], displayOn: printFactory, withStatus: status)
+            players[attackerID].play(against: players[defenderID])
 
             playerTurn.toggle()
         } while !gameOver
@@ -42,31 +37,36 @@ class Game {
 
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
-        let newPlayer = Player(name: playerName)
+        let newPlayer = Player(name: playerName, index: players.count)
+        PrintFactory.shared.currentPlayer = playerTurn
+        PrintFactory.shared.changeTitle(with: "\(playerName)'s team")
         players.append(newPlayer)
 
         for i in 1 ... 3 {
             var heroName: String
             repeat {
-                heroName = selectCharacterName(forHero: i, withTitle: "\(playerName)'s team")
+                heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)
             } while heroName == "" || isCharacterNameTaken(heroName)
 
-            newPlayer.addCharacter(Character(name: heroName))
+            PrintFactory.shared.showPlayerName(forPlayer: newPlayer.index, name: newPlayer.name)
+            newPlayer.addCharacter(named: heroName)
         }
+        playerTurn.toggle()
     }
 
     // Get a Character Name from the player
     // Check if this name is already in use
-    private func selectCharacterName(forHero i: Int, withTitle title: String) -> String {
+    private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
         var heroName = ""
-        printFactory.askUser(title: title, question: "Enter the name for your hero #\(i)", statusLeft: status.first!, statusRight: status.last!)
+        PrintFactory.shared.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
 
         if let input = readLine(strippingNewline: true) {
-            heroName = input
+            heroName = input.capitalized
         }
 
         if isCharacterNameTaken(heroName) {
-            print("This hero name is already taken :(")
+            PrintFactory.shared.informUser(description: ["\(heroName) is already taken :("])
+            return selectCharacterName(forHero: i, forPlayer: player )
         }
 
         return heroName
@@ -74,6 +74,7 @@ class Game {
 
     // Check if a Character name is already in Use
     private func isCharacterNameTaken(_ name: String) -> Bool {
+
         for player in players {
             if player.isCharacterNameTaken(name) {
                 return true

@@ -10,14 +10,18 @@ import Foundation
 
 class Character {
     let name: String
+    let index: [Int]
+    var weapon: Weapon
     private let maxHitPoints: Int = 50
     private var currentHitPoints: Int
-    private var weapon: Weapon
 
-    init(name: String) {
+    init(name: String, index: [Int]) {
         self.name = name
+        self.index = index
         self.currentHitPoints = self.maxHitPoints
         self.weapon = Weapon()
+
+        updateStatus()
     }
 
     var isAlive: Bool {
@@ -30,15 +34,31 @@ class Character {
 
     func attack(_ opponent: Character) {
         opponent.takeDamage(from: self.weapon)
+        updateStatus(isHighlighted: false)
     }
 
     func takeDamage(from weapon: Weapon) {
-        // Guard Clause: Negative hit points are impossible
+        // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
-        if weapon.damage >= self.currentHitPoints {
-            return self.currentHitPoints = 0
+        if weapon.damage >= currentHitPoints {
+            currentHitPoints = 0
+        } else {
+            currentHitPoints -= weapon.damage
         }
 
-        self.currentHitPoints -= weapon.damage
+        updateStatus()
+    }
+
+    func updateStatus(isHighlighted: Bool = false) {
+        PrintFactory.shared.showCharacter(
+            fromPlayer: index.first!,
+            ofIndex: index.last!,
+            name: name,
+            damage: weapon.damage,
+            currentHitPoints: currentHitPoints,
+            maxHitPoints: maxHitPoints,
+            isAlive: isAlive,
+            isHighlighted: isHighlighted
+        )
     }
 }
