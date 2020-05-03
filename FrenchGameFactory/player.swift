@@ -19,18 +19,6 @@ class Player {
 
     }
 
-    var status: [String] {
-        var array = Array(repeating: "", count: 4)
-
-        if !characters.isEmpty { array[0] = name }
-
-        for (index, character) in characters.enumerated() {
-            array[index + 1] = "\(index + 1) \(character.status)"
-        }
-
-        return array
-    }
-
     func play(against opponent: Player) {
 
         let attacker = chooseCharacter(attackBy: self, role: "attacker")

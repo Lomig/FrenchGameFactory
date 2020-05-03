@@ -11,17 +11,9 @@ import Foundation
 class Game {
     var players: [Player] = []
     var playerTurn: PlayerTurn = .player1
+
     var gameOver = false
 
-    var status: [[String]] {
-        var array = Array(repeating: Array(repeating: "", count: 4), count: 2)
-
-        for (index, player) in players.enumerated() {
-            array[index] = player.status
-        }
-
-        return array
-    }
 
     // Main Gameplay Loop
     func start() {

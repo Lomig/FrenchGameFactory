@@ -28,10 +28,6 @@ class Character {
         return currentHitPoints > 0
     }
 
-    var status: String {
-        return "\("\(self.name.capitalized) (\(weapon.damage)dmg)".padding(toLength: 16, withPad: " ", startingAt: 0)) \(String(format: "%02d", self.currentHitPoints)) / \(self.maxHitPoints)"
-    }
-
     func attack(_ opponent: Character) {
         opponent.takeDamage(from: self.weapon)
         updateStatus(isHighlighted: false)
