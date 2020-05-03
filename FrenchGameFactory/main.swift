@@ -16,5 +16,5 @@ game.start()
 
 
 // Return gracefullt the cursor bottom left of the screen
-print("\u{1B}[6E")
+print("\u{1B}[10E")
 

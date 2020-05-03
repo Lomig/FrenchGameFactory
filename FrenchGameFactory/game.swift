@@ -57,7 +57,7 @@ class Game {
         }
 
         if isCharacterNameTaken(heroName) {
-            PrintFactory.shared.informUser(description: ["\(heroName) is already taken :("])
+            PrintFactory.shared.informUser(description: "\(heroName) is already taken :(")
             return selectCharacterName(forHero: i, forPlayer: player )
         }
 
@@ -65,8 +65,10 @@ class Game {
     }
 
     // Check if a Character name is already in Use
+    // Pascal: Here is an exemple where forEach cannot be used because of early returns
+    // We can avoid this by creating a local variable and iterate through the entire array
+    // But it's less elegant :)
     private func isCharacterNameTaken(_ name: String) -> Bool {
-
         for player in players {
             if player.isCharacterNameTaken(name) {
                 return true

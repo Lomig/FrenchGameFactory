@@ -21,6 +21,7 @@ class Character {
         self.currentHitPoints = self.maxHitPoints
         self.weapon = Weapon()
 
+        // Print the newly created character
         updateStatus()
     }
 
@@ -36,10 +37,10 @@ class Character {
     func takeDamage(from weapon: Weapon) {
         // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
-        PrintFactory.shared.informUser(description: ["\(name) has been hit for \(weapon.damage) damages."])
+        PrintFactory.shared.informUser(description: "\(name) has been hit for \(weapon.damage) damages.")
         if weapon.damage >= currentHitPoints {
             currentHitPoints = 0
-            PrintFactory.shared.informUser(description: ["\(name) is lying on the ground!"])
+            PrintFactory.shared.informUser(description: "\(name) is lying on the ground!")
         } else {
             currentHitPoints -= weapon.damage
         }
@@ -47,6 +48,8 @@ class Character {
         updateStatus()
     }
 
+    // Print the character characteristics
+    // We call this each time the character is being selected or suffers changes
     func updateStatus(isHighlighted: Bool = false) {
         PrintFactory.shared.showCharacter(
             fromPlayer: index.first!,
