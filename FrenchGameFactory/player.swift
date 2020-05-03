@@ -33,13 +33,11 @@ class Player {
         var description: [String] = []
         if let character = boxedCharacter {
             description = ["\(character.name) attacks!"]
-        } else {
-            description = ["\(player.name) is choosing their attacker..."]
         }
 
         PrintFactory.shared.changeTitle(with: "\(player.name) is attacking!")
         PrintFactory.shared.informUser(description: description)
-        PrintFactory.shared.askUser(question: "Choose your \(role)", colorize: true)
+        PrintFactory.shared.askUser(question: "\(player.name), choose your \(role):", colorize: true)
 
         if let chosenValue = Int(readLine(strippingNewline: true)!) {
             if chosenValue > 0 && chosenValue <= characters.count {
