@@ -40,8 +40,10 @@ class Character {
     func takeDamage(from weapon: Weapon) {
         // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
+        PrintFactory.shared.informUser(description: ["\(name) has been hit for \(weapon.damage) damages."])
         if weapon.damage >= currentHitPoints {
             currentHitPoints = 0
+            PrintFactory.shared.informUser(description: ["\(name) is lying on the ground!"])
         } else {
             currentHitPoints -= weapon.damage
         }
