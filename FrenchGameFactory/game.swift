@@ -12,7 +12,24 @@ class Game {
     var players: [Player] = []
     var playerTurn: PlayerTurn = .player1
 
-    var gameOver = false
+    var gameOver: Bool {
+        var isTeamWiped: Bool = false
+
+        players.forEach { player in
+            var areCharactersWiped = true
+
+            player.characters.forEach { character in
+                if character.isAlive {
+                    areCharactersWiped = false
+                }
+            }
+
+            if areCharactersWiped == true {
+                isTeamWiped = true
+            }
+        }
+        return isTeamWiped
+    }
 
 
     // Main Gameplay Loop
