@@ -14,11 +14,8 @@ class Player {
     var characters: [Character] = []
 
     var isWiped: Bool {
-        for character in characters {
-            if character.isAlive { return false }
-        }
+        return characters.first { character in character.isAlive } == nil
 
-        return true
     }
 
     init(name: String, index: Int) {
@@ -74,13 +71,6 @@ class Player {
 
     // Check if a name is already in use in this team
     func isCharacterNameTaken(_ name: String) -> Bool {
-        // Pascal: Here is an exemple where forEach cannot be used because of early returns
-        // We can avoid this by creating a local variable and iterate through the entire array
-        // But it's less elegant :)
-        for character in characters {
-            if character.name == name { return true }
-        }
-
-        return false
+        return characters.first { character in character.name == name } != nil
     }
 }

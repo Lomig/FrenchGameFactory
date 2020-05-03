@@ -143,7 +143,7 @@ class PrintFactory {
     private func updateStatus() {
         lines[3] = players.first! + "    " + players.last!
 
-        for i in 0...2 {
+        (0...2).forEach { i in
             lines[i + 5] = characters.first![i] + "    " + characters.last![i]
         }
     }

@@ -13,14 +13,7 @@ class Game {
     var playerTurn: PlayerTurn = .player1
 
     var gameOver: Bool {
-        // Pascal: Here is an exemple where forEach cannot be used because of early returns
-        // We can avoid this by creating a local variable and iterate through the entire array
-        // But it's less elegant :)
-        for player in players {
-            if player.isWiped { return true }
-        }
-
-        return false
+        return players.first { player in player.isWiped } != nil
     }
 
 
@@ -45,7 +38,7 @@ class Game {
         PrintFactory.shared.changeTitle(with: "\(playerName)'s team")
         players.append(newPlayer)
 
-        for i in 1 ... 3 {
+        (1...3).forEach { i in
             var heroName: String
             repeat {
                 heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)
@@ -76,17 +69,8 @@ class Game {
     }
 
     // Check if a Character name is already in Use
-    // Pascal: Here is an exemple where forEach cannot be used because of early returns
-    // We can avoid this by creating a local variable and iterate through the entire array
-    // But it's less elegant :)
     private func isCharacterNameTaken(_ name: String) -> Bool {
-        for player in players {
-            if player.isCharacterNameTaken(name) {
-                return true
-            }
-        }
-
-        return false
+        return players.first { player in player.isCharacterNameTaken(name) } != nil
     }
 
     // Check teams to know who is the winner
