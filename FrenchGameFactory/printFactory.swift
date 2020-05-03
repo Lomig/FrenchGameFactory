@@ -40,6 +40,15 @@ class PrintFactory {
         display()
     }
 
+    func askUser(_ something: Bool) {
+        if something { return }
+
+        lines[13] = padLine("", fullLine: true)
+        lines[14] = padLine("", fullLine: true)
+
+        display()
+    }
+
     // Print a title at Top, Center of the screen
     func changeTitle(with title: String, colorize: Bool = false) {
         var color = Color.white

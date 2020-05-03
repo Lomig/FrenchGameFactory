@@ -12,7 +12,7 @@ class Character {
     let name: String
     let index: [Int]
     var weapon: Weapon
-    private let maxHitPoints: Int = 50
+    private let maxHitPoints: Int = 10
     private var currentHitPoints: Int
 
     init(name: String, index: [Int]) {

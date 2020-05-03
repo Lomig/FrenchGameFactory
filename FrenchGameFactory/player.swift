@@ -13,6 +13,14 @@ class Player {
     let index: Int
     var characters: [Character] = []
 
+    var isWiped: Bool {
+        for character in characters {
+            if character.isAlive { return false }
+        }
+
+        return true
+    }
+
     init(name: String, index: Int) {
         self.name = name
         self.index = index

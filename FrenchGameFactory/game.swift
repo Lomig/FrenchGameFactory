@@ -13,22 +13,14 @@ class Game {
     var playerTurn: PlayerTurn = .player1
 
     var gameOver: Bool {
-        var isTeamWiped: Bool = false
-
-        players.forEach { player in
-            var areCharactersWiped = true
-
-            player.characters.forEach { character in
-                if character.isAlive {
-                    areCharactersWiped = false
-                }
-            }
-
-            if areCharactersWiped == true {
-                isTeamWiped = true
-            }
+        // Pascal: Here is an exemple where forEach cannot be used because of early returns
+        // We can avoid this by creating a local variable and iterate through the entire array
+        // But it's less elegant :)
+        for player in players {
+            if player.isWiped { return true }
         }
-        return isTeamWiped
+
+        return false
     }
 
 
@@ -42,6 +34,8 @@ class Game {
 
             playerTurn.toggle()
         } while !gameOver
+
+        declareWinningTeam()
     }
 
     // Add a player with 3 characters
@@ -66,7 +60,7 @@ class Game {
     // Get a Character Name from the player
     // Check if this name is already in use
     private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
-        var heroName = ""
+        var heroName: String = ""
         PrintFactory.shared.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
 
         if let input = readLine(strippingNewline: true) {
@@ -93,6 +87,22 @@ class Game {
         }
 
         return false
+    }
+
+    // Check teams to know who is the winner
+    // One, the other, or a tie
+    private func declareWinningTeam() {
+        let player1Wiped: Bool = players.first!.isWiped
+        let player2Wiped: Bool = players.last!.isWiped
+
+        PrintFactory.shared.askUser(false)
+
+        if player1Wiped && player2Wiped {
+            return PrintFactory.shared.informUser(description: ["", "Tie! Noone won this round!", ""])
+        }
+
+        let name: String = player1Wiped ? players.last!.name : players.first!.name
+        PrintFactory.shared.informUser(description: ["", "Victory for \(name)!", ""])
     }
 }
 
