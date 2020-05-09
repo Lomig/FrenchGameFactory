@@ -10,8 +10,12 @@ import Foundation
 
 class Player {
     static let maxNumberOfCharacters: Int = 3
+    
     let name: String
-    let index: Int
+
+    // printFactoryIndex is used by PrintFactory to know if it should print the Player and its Characters
+    // on the left or the right side of the screen.
+    let printFactoryIndex: Int
     var characters: [Character] = []
 
     var isWiped: Bool {
@@ -19,9 +23,9 @@ class Player {
 
     }
 
-    init(name: String, index: Int) {
+    init(name: String, printFactoryIndex: Int) {
         self.name = name
-        self.index = index
+        self.printFactoryIndex = printFactoryIndex
 
     }
 
@@ -71,7 +75,7 @@ class Player {
 
     // Add a new character for the player
     func addCharacter(named name: String) {
-        let new_character = Character(name: name, index: [index, characters.count])
+        let new_character = Character(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
         characters.append(new_character)
     }
 

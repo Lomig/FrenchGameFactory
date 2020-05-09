@@ -31,7 +31,7 @@ class Game {
 
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
-        let newPlayer = Player(name: playerName, index: players.count)
+        let newPlayer = Player(name: playerName, printFactoryIndex: players.count)
 
         // Storing the player turn in the Print Factory
         // Used there to chose the color to display for each team
@@ -44,10 +44,10 @@ class Game {
         (1...Player.maxNumberOfCharacters).forEach { i in
             var heroName: String
             repeat {
-                heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)
+                heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
             } while heroName == ""
 
-            PrintFactory.shared.showPlayerName(forPlayer: newPlayer.index, name: newPlayer.name)
+            PrintFactory.shared.showPlayerName(forPlayer: newPlayer.printFactoryIndex, name: newPlayer.name)
             newPlayer.addCharacter(named: heroName)
         }
         playerTurn.toggle()

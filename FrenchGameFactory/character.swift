@@ -10,14 +10,17 @@ import Foundation
 
 class Character {
     let name: String
-    let index: [Int]
+
+    // printFactoryIndex is used by PrintFactory to know if it should print the Player and its Characters
+    // on the left or the right side of the screen.
+    let printFactoryIndex: [Int]
     var weapon: Weapon
-    private let maxHitPoints: Int = 10
+    private let maxHitPoints: Int = 25
     private var currentHitPoints: Int
 
-    init(name: String, index: [Int]) {
+    init(name: String, printFactoryIndex: [Int]) {
         self.name = name
-        self.index = index
+        self.printFactoryIndex = printFactoryIndex
         self.currentHitPoints = self.maxHitPoints
         self.weapon = Weapon()
 
@@ -76,7 +79,7 @@ class Character {
                 return
             } else if ["no", "n"].contains(confirmation.lowercased()){
                 PrintFactory.shared.closeChest()
-                PrintFactory.shared.informUser(description: ["\(name) found a treasure...", "\(name) left the treasure behind."])
+                PrintFactory.shared.informUser(description: "\(name) found a treasure but left the treasure behind...")
                 return
             }
 
@@ -89,8 +92,8 @@ class Character {
     // We call this each time the character is being selected or suffers changes
     func updateStatus(isHighlighted: Bool = false) {
         PrintFactory.shared.showCharacter(
-            fromPlayer: index.first!,
-            ofIndex: index.last!,
+            fromPlayer: printFactoryIndex.first!,
+            ofIndex: printFactoryIndex.last!,
             name: name,
             damage: weapon.damage,
             currentHitPoints: currentHitPoints,
