@@ -35,13 +35,13 @@ class Player {
         let attacker = chooseCharacter(attackBy: self, role: .attacker)
         attacker.updateStatus(isHighlighted: true)
 
-        // Choose a target to play against
-        let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)
-        attacker.attack(target)
-
         // The attacker may find a chest
         // 40% probability for now
         if Int.random(in: 1...100) <= 40 { attacker.getChest() }
+
+        // Choose a target to play against
+        let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)
+        attacker.attack(target)
     }
 
     // Choose character from the User input.
