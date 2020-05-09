@@ -70,7 +70,7 @@ class Character {
     }
 
     func tradeWeapon(with weapon: Weapon) {
-        if let confirmation = readLine(strippingNewline: true) {
+        if let confirmation = readLine() {
             if ["yes", "y"].contains(confirmation.lowercased()) {
                 self.weapon = weapon
                 PrintFactory.shared.closeChest()

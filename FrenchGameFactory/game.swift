@@ -59,7 +59,7 @@ class Game {
         var heroName: String = ""
         PrintFactory.shared.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
 
-        if let input = readLine(strippingNewline: true) {
+        if let input = readLine() {
             heroName = input.capitalized
         }
 
