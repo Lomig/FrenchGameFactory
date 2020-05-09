@@ -41,9 +41,7 @@ class PrintFactory {
         display()
     }
 
-    func askUser(_ something: Bool) {
-        if something { return }
-
+    func hideQuestionSection() {
         lines[13] = padLine("", lineType: .fullLine)
         lines[14] = padLine("", lineType: .fullLine)
 

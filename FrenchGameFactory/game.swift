@@ -83,7 +83,7 @@ class Game {
         let player1Wiped: Bool = players.first!.isWiped
         let player2Wiped: Bool = players.last!.isWiped
 
-        printFactory.askUser(false)
+        printFactory.hideQuestionSection()
 
         if player1Wiped && player2Wiped {
             return printFactory.informUser(description: ["", "Tie! Noone won this round!", ""])
