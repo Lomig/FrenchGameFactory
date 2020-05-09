@@ -55,7 +55,7 @@ class Player {
         }
 
         printFactory.changeTitle(with: "\(player.name) is attacking!")
-        printFactory.askUser(question: "\(player.name), choose your \(role.rawValue):", colorize: true)
+        printFactory.askUser(question: "\(player.name), choose your \(role.rawValue): (1-\(Player.maxNumberOfCharacters))", colorize: true)
 
 
         // Get player input to select a character
