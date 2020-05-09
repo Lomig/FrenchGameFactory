@@ -51,7 +51,7 @@ class Character {
         updateStatus()
     }
 
-    func getCrate() {
+    func getChest() {
         let newWeapon = Weapon(min_damage: weapon.damage)
         let newWeaponDescription: String = "It's a \(newWeapon.name.capitalized)!"
         let comparison: String
