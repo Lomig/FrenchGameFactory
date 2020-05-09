@@ -107,13 +107,15 @@ class PrintFactory {
     }
 
     // Add information lines
+    // Argument being an array of string
     func informUser(description: [String]) {
-        updateDescription(with: description)
-
-        display()
+        description.forEach { string in
+            informUser(description: string)
+        }
     }
+    // Argument being a single string
     func informUser(description: String) {
-        updateDescription(with: [description])
+        updateDescription(with: description)
 
         display()
     }
@@ -188,12 +190,10 @@ class PrintFactory {
 
     // Update the Description Section
     // A new description "pushes" former ones up
-    private func updateDescription(with description: [String]) {
-        description.forEach { line in
+    private func updateDescription(with description: String) {
             lines[9] = lines[10]
             lines[10] = lines[11]
-            lines[11] = padLine(line, lineType: .fullLine)
-        }
+            lines[11] = padLine(description, lineType: .fullLine)
     }
 
     // Update the Question Section
