@@ -11,6 +11,7 @@ import Foundation
 class Game {
     var players: [Player] = []
     var playerTurn: PlayerTurn = .player1
+    private let printFactory: PrintFactory = PrintFactory.shared
 
     var gameOver: Bool {
         return players.first { player in player.isWiped } != nil
@@ -20,7 +21,7 @@ class Game {
     // Main Gameplay Loop
     func start() {
         repeat {
-            PrintFactory.shared.currentPlayer = playerTurn
+            printFactory.currentPlayer = playerTurn
             players[playerTurn.currentPlayer()].play(against: players[playerTurn.nextPlayer()])
 
             playerTurn.toggle()
@@ -36,8 +37,8 @@ class Game {
         // Storing the player turn in the Print Factory
         // Used there to chose the color to display for each team
         // Blue for Player1, Purple for Player2
-        PrintFactory.shared.currentPlayer = playerTurn
-        PrintFactory.shared.changeTitle(with: "\(playerName)'s team")
+        printFactory.currentPlayer = playerTurn
+        printFactory.changeTitle(with: "\(playerName)'s team")
 
         players.append(newPlayer)
 
@@ -47,7 +48,7 @@ class Game {
                 heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
             } while heroName == ""
 
-            PrintFactory.shared.showPlayerName(forPlayer: newPlayer.printFactoryIndex, name: newPlayer.name)
+            printFactory.showPlayerName(forPlayer: newPlayer.printFactoryIndex, name: newPlayer.name)
             newPlayer.addCharacter(named: heroName)
         }
         playerTurn.toggle()
@@ -57,14 +58,14 @@ class Game {
     // Check if this name is already in use
     private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
         var heroName: String = ""
-        PrintFactory.shared.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
+        printFactory.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
 
         if let input = readLine() {
             heroName = input.capitalized
         }
 
         if isCharacterNameTaken(heroName) {
-            PrintFactory.shared.informUser(description: "\(heroName) is already taken :(")
+            printFactory.informUser(description: "\(heroName) is already taken :(")
             return selectCharacterName(forHero: i, forPlayer: player )
         }
 
@@ -82,14 +83,14 @@ class Game {
         let player1Wiped: Bool = players.first!.isWiped
         let player2Wiped: Bool = players.last!.isWiped
 
-        PrintFactory.shared.askUser(false)
+        printFactory.askUser(false)
 
         if player1Wiped && player2Wiped {
-            return PrintFactory.shared.informUser(description: ["", "Tie! Noone won this round!", ""])
+            return printFactory.informUser(description: ["", "Tie! Noone won this round!", ""])
         }
 
         let name: String = player1Wiped ? players.last!.name : players.first!.name
-        PrintFactory.shared.informUser(description: ["", "Victory for \(name)!", ""])
+        printFactory.informUser(description: ["", "Victory for \(name)!", ""])
     }
 }
 

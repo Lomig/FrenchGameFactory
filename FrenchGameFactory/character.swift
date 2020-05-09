@@ -17,6 +17,7 @@ class Character {
     var weapon: Weapon
     private let maxHitPoints: Int = 25
     private var currentHitPoints: Int
+    private let printFactory: PrintFactory = PrintFactory.shared
 
     init(name: String, printFactoryIndex: [Int]) {
         self.name = name
@@ -40,10 +41,10 @@ class Character {
     func takeDamage(from weapon: Weapon) {
         // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
-        PrintFactory.shared.informUser(description: "\(name) has been hit for \("damage".pluralize(number: weapon.damage)).")
+        printFactory.informUser(description: "\(name) has been hit for \("damage".pluralize(number: weapon.damage)).")
         if weapon.damage >= currentHitPoints {
             currentHitPoints = 0
-            PrintFactory.shared.informUser(description: "\(name) is lying on the ground!")
+            printFactory.informUser(description: "\(name) is lying on the ground!")
         } else {
             currentHitPoints -= weapon.damage
         }
@@ -67,8 +68,8 @@ class Character {
         // We send to the PrintFactory the public content of the Weapon instead of the Weapon itself
         // We try to avoid PrintFactory to know too much of the internal mechanics of what it has to print.
         // We display the chest here
-        PrintFactory.shared.openChest(for: name, content: [newWeaponDescription, String(newWeapon.damage), comparison])
-        PrintFactory.shared.displayChest()
+        printFactory.openChest(for: name, content: [newWeaponDescription, String(newWeapon.damage), comparison])
+        printFactory.displayChest()
 
         // We ask the user if he wants to keep his old weapon or change it
         tradeWeapon(with: newWeapon)
@@ -79,25 +80,25 @@ class Character {
         if let confirmation = readLine() {
             if ["yes", "y"].contains(confirmation.lowercased()) {
                 self.weapon = weapon
-                PrintFactory.shared.closeChest()
-                PrintFactory.shared.informUser(description: ["\(name) found a treasure...", "\(name) has changed his weapon!"])
+                printFactory.closeChest()
+                printFactory.informUser(description: ["\(name) found a treasure...", "\(name) has changed his weapon!"])
                 updateStatus()
                 return
             } else if ["no", "n"].contains(confirmation.lowercased()){
-                PrintFactory.shared.closeChest()
-                PrintFactory.shared.informUser(description: "\(name) found a treasure but left the treasure behind...")
+                printFactory.closeChest()
+                printFactory.informUser(description: "\(name) found a treasure but left the treasure behind...")
                 return
             }
 
         }
-        PrintFactory.shared.displayChest(retry: true)
+        printFactory.displayChest(retry: true)
         tradeWeapon(with: weapon)
     }
 
     // Print the character characteristics
     // We call this each time the character is being selected or suffers changes
     func updateStatus(isHighlighted: Bool = false) {
-        PrintFactory.shared.showCharacter(
+        printFactory.showCharacter(
             fromPlayer: printFactoryIndex.first!,
             ofIndex: printFactoryIndex.last!,
             name: name,

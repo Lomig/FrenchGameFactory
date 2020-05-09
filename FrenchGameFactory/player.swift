@@ -17,6 +17,7 @@ class Player {
     // on the left or the right side of the screen.
     let printFactoryIndex: Int
     var characters: [Character] = []
+    private let printFactory: PrintFactory = PrintFactory.shared
 
     var isWiped: Bool {
         return characters.first { character in character.isAlive } == nil
@@ -50,11 +51,11 @@ class Player {
     // Recursively retry
     func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole) -> Character {
         if let character = boxedCharacter {
-            PrintFactory.shared.informUser(description: "\(character.name) attacks!")
+            printFactory.informUser(description: "\(character.name) attacks!")
         }
 
-        PrintFactory.shared.changeTitle(with: "\(player.name) is attacking!")
-        PrintFactory.shared.askUser(question: "\(player.name), choose your \(role.rawValue):", colorize: true)
+        printFactory.changeTitle(with: "\(player.name) is attacking!")
+        printFactory.askUser(question: "\(player.name), choose your \(role.rawValue):", colorize: true)
 
 
         // Get player input to select a character
@@ -66,11 +67,11 @@ class Player {
                 if characters[chosenValue - 1].isAlive { return characters[chosenValue - 1] }
 
                 // Error message if the character is not alive
-                PrintFactory.shared.informUser(description: "This character is out of combat :( Try again!")
+                printFactory.informUser(description: "This character is out of combat :( Try again!")
             }
         } else {
             // Error message if the input cannot lead to a character selection
-            PrintFactory.shared.informUser(description: "This is not a valid input. Retrying...")
+            printFactory.informUser(description: "This is not a valid input. Retrying...")
         }
 
         // Pure recursive call as the last line
