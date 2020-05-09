@@ -17,7 +17,7 @@ class Character {
     var weapon: Weapon
     private let maxHitPoints: Int = 25
     private var currentHitPoints: Int
-    private let printFactory: PrintFactory = PrintFactory.shared
+    private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
     init(name: String, printFactoryIndex: [Int]) {
         self.name = name

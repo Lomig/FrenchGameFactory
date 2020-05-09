@@ -17,7 +17,7 @@ class Player {
     // on the left or the right side of the screen.
     let printFactoryIndex: Int
     var characters: [Character] = []
-    private let printFactory: PrintFactory = PrintFactory.shared
+    private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
     var isWiped: Bool {
         return characters.first { character in character.isAlive } == nil

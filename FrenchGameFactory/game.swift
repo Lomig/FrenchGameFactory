@@ -11,7 +11,7 @@ import Foundation
 class Game {
     var players: [Player] = []
     var playerTurn: PlayerTurn = .player1
-    private let printFactory: PrintFactory = PrintFactory.shared
+    private var printFactory: PrintFactory = ConsolePrintFactory.shared
 
     var gameOver: Bool {
         return players.first { player in player.isWiped } != nil
