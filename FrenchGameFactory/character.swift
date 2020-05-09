@@ -64,11 +64,17 @@ class Character {
             comparison = "Frankly? I cannot see the difference with your \(weapon.name.capitalized)..."
         }
 
+        // We send to the PrintFactory the public content of the Weapon instead of the Weapon itself
+        // We try to avoid PrintFactory to know too much of the internal mechanics of what it has to print.
+        // We display the chest here
         PrintFactory.shared.openChest(for: name, content: [newWeaponDescription, String(newWeapon.damage), comparison])
         PrintFactory.shared.displayChest()
+
+        // We ask the user if he wants to keep his old weapon or change it
         tradeWeapon(with: newWeapon)
     }
 
+    // Change the character weapon if the users wants to
     func tradeWeapon(with weapon: Weapon) {
         if let confirmation = readLine() {
             if ["yes", "y"].contains(confirmation.lowercased()) {
