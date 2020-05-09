@@ -108,14 +108,14 @@ class PrintFactory {
 
     // Add information lines
     // Argument being an array of string
-    func informUser(description: [String]) {
+    func informUser(description: [String], color: Color? = nil) {
         description.forEach { string in
-            informUser(description: string)
+            informUser(description: string, color: color)
         }
     }
     // Argument being a single string
-    func informUser(description: String) {
-        updateDescription(with: description)
+    func informUser(description: String, color: Color? = nil) {
+        updateDescription(with: description, color: color)
 
         display()
     }
@@ -190,10 +190,12 @@ class PrintFactory {
 
     // Update the Description Section
     // A new description "pushes" former ones up
-    private func updateDescription(with description: String) {
+    private func updateDescription(with description: String, color boxedColor: Color?) {
+        let color = boxedColor ?? .white
+
             lines[9] = lines[10]
             lines[10] = lines[11]
-            lines[11] = padLine(description, lineType: .fullLine)
+            lines[11] = colorString(padLine(description, lineType: .fullLine), color: color)
     }
 
     // Update the Question Section

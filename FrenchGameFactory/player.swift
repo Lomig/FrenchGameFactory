@@ -49,7 +49,7 @@ class Player {
     // Choose character from the User input.
     // If the input is not a number within the index, or if the character selected is already dead
     // Recursively retry
-    func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole) -> Character {
+    func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole, isSecondAttempt: Bool = false) -> Character {
         if let character = boxedCharacter {
             printFactory.informUser(description: "\(character.name) attacks!")
         }
@@ -64,19 +64,24 @@ class Player {
             if chosenValue > 0 && chosenValue <= Player.maxNumberOfCharacters {
                 // The chosen character must be alive to be selected
                 // If it's the case, we return it
-                if characters[chosenValue - 1].isAlive { return characters[chosenValue - 1] }
+                if characters[chosenValue - 1].isAlive {
+                    if isSecondAttempt {
+                        printFactory.informUser(description: "Thanks for retrying, valid character chosen!", color: .green)
+                    }
+                    return characters[chosenValue - 1]
+                }
 
                 // Error message if the character is not alive
-                printFactory.informUser(description: "This character is out of combat :( Try again!")
+                printFactory.informUser(description: "This character is out of combat :(", color: .red)
             }
-        } else {
-            // Error message if the input cannot lead to a character selection
-            printFactory.informUser(description: "This is not a valid input. Retrying...")
         }
+
+        // Error message if the input cannot lead to a character selection
+        printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
 
         // Pure recursive call as the last line
         // I don't know if Swift does TCO, but it does not hurt to do as if it was the case.
-        return chooseCharacter(attackBy: player, role: role)
+        return chooseCharacter(attackBy: player, role: role, isSecondAttempt: true)
     }
 
     // Add a new character for the player
