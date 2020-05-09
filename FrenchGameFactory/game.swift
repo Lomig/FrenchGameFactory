@@ -32,8 +32,13 @@ class Game {
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
         let newPlayer = Player(name: playerName, index: players.count)
+
+        // Storing the player turn in the Print Factory
+        // Used there to chose the color to display for each team
+        // Blue for Player1, Purple for Player2
         PrintFactory.shared.currentPlayer = playerTurn
         PrintFactory.shared.changeTitle(with: "\(playerName)'s team")
+
         players.append(newPlayer)
 
         (1...3).forEach { i in
