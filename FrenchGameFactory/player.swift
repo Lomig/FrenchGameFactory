@@ -57,14 +57,19 @@ class Player {
         PrintFactory.shared.askUser(question: "\(player.name), choose your \(role.rawValue):", colorize: true)
 
 
-        if let chosenValue = Int(readLine(strippingNewline: true)!) {
-            if chosenValue > 0 && chosenValue <= characters.count {
-                // Clause Guard: Success!
+        // Get player input to select a character
+        if let chosenValue = Int(readLine()!) {
+            // The value entered by the user should bet between 0 and the number of characters
+            if chosenValue > 0 && chosenValue <= Player.maxNumberOfCharacters {
+                // The chosen character must be alive to be selected
+                // If it's the case, we return it
                 if characters[chosenValue - 1].isAlive { return characters[chosenValue - 1] }
 
+                // Error message if the character is not alive
                 PrintFactory.shared.informUser(description: "This character is out of combat :( Try again!")
             }
         } else {
+            // Error message if the input cannot lead to a character selection
             PrintFactory.shared.informUser(description: "This is not a valid input. Retrying...")
         }
 
