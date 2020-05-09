@@ -122,7 +122,7 @@ class PrintFactory {
         setChestDisplay()
         updateTitle(with: "\(characterName) found a treasure!", color: .yellow)
 
-        lines[3] = padLine("Woot!", lineType: .treasureLine)
+        lines[3] = padLine("Woot! Just before their attack,", lineType: .treasureLine)
         lines[4] = padLine("\(characterName) found a treasure!", lineType: .treasureLine)
 
         let cutName = cut(content[0], lineType: .treasureLine)

@@ -36,7 +36,8 @@ class Player {
         attacker.updateStatus(isHighlighted: true)
 
         // The attacker may find a chest
-        // 40% probability for now
+        // 40% probability
+        // We do it before attacking for the flow of the game inside the console
         if Int.random(in: 1...100) <= 40 { attacker.getChest() }
 
         // Choose a target to play against
