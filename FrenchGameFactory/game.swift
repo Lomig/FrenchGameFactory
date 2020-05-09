@@ -21,9 +21,7 @@ class Game {
     func start() {
         repeat {
             PrintFactory.shared.currentPlayer = playerTurn
-            let attackerID = playerTurn.rawValue
-            let defenderID = (playerTurn.rawValue + 1) % 2
-            players[attackerID].play(against: players[defenderID])
+            players[playerTurn.currentPlayer()].play(against: players[playerTurn.nextPlayer()])
 
             playerTurn.toggle()
         } while !gameOver
@@ -97,6 +95,17 @@ enum PlayerTurn: Int {
         switch(self) {
         case .player1: self = .player2
         case .player2: self = .player1
+        }
+    }
+
+    func currentPlayer() -> Int {
+        return self.rawValue
+    }
+
+    func nextPlayer() -> Int {
+        switch self {
+        case .player1: return 1
+        case .player2: return 0
         }
     }
 }
