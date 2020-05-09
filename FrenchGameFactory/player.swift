@@ -32,11 +32,11 @@ class Player {
     // Main Action between two characters
     func play(against opponent: Player) {
         // Choose an attacker to play with
-        let attacker = chooseCharacter(attackBy: self, role: "attacker")
+        let attacker = chooseCharacter(attackBy: self, role: .attacker)
         attacker.updateStatus(isHighlighted: true)
 
         // Choose a target to play against
-        let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: "target")
+        let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)
         attacker.attack(target)
 
         // The attacker may find a crate
@@ -48,13 +48,13 @@ class Player {
     // Choose character from the User input.
     // If the input is not a number within the index, or if the character selected is already dead
     // Recursively retry
-    func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: String) -> Character {
+    func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole) -> Character {
         if let character = boxedCharacter {
             PrintFactory.shared.informUser(description: "\(character.name) attacks!")
         }
 
         PrintFactory.shared.changeTitle(with: "\(player.name) is attacking!")
-        PrintFactory.shared.askUser(question: "\(player.name), choose your \(role):", colorize: true)
+        PrintFactory.shared.askUser(question: "\(player.name), choose your \(role.rawValue):", colorize: true)
 
 
         if let chosenValue = Int(readLine(strippingNewline: true)!) {
@@ -83,4 +83,8 @@ class Player {
     func isCharacterNameTaken(_ name: String) -> Bool {
         return characters.first { character in character.name == name } != nil
     }
+}
+
+enum CharacterRole: String {
+    case attacker, target
 }
