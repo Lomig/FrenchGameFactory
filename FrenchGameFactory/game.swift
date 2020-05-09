@@ -45,7 +45,7 @@ class Game {
             var heroName: String
             repeat {
                 heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)
-            } while heroName == "" || isCharacterNameTaken(heroName)
+            } while heroName == ""
 
             PrintFactory.shared.showPlayerName(forPlayer: newPlayer.index, name: newPlayer.name)
             newPlayer.addCharacter(named: heroName)
