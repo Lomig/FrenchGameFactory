@@ -41,7 +41,7 @@ class Game {
 
         players.append(newPlayer)
 
-        (1...3).forEach { i in
+        (1...Player.maxNumberOfCharacters).forEach { i in
             var heroName: String
             repeat {
                 heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)

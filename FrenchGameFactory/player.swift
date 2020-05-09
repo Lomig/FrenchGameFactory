@@ -9,6 +9,7 @@
 import Foundation
 
 class Player {
+    static let maxNumberOfCharacters: Int = 3
     let name: String
     let index: Int
     var characters: [Character] = []
