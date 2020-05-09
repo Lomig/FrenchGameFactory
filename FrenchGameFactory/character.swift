@@ -15,8 +15,9 @@ class Character {
     // on the left or the right side of the screen.
     let printFactoryIndex: [Int]
     var weapon: Weapon
-    private let maxHitPoints: Int = 25
+    private let maxHitPoints: Int = 30
     private var currentHitPoints: Int
+    private let force: Int = 10
     private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
     init(name: String, printFactoryIndex: [Int]) {
@@ -34,19 +35,19 @@ class Character {
     }
 
     func attack(_ opponent: Character) {
-        opponent.takeDamage(from: weapon)
+        opponent.takeDamage(from: weapon, force: force)
         updateStatus(isHighlighted: false)
     }
 
-    func takeDamage(from weapon: Weapon) {
+    func takeDamage(from weapon: Weapon, force: Int) {
         // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
         printFactory.informUser(description: "\(name) has been hit for \("damage".pluralize(number: weapon.damage)).")
-        if weapon.damage >= currentHitPoints {
+        if weapon.damage + force >= currentHitPoints {
             currentHitPoints = 0
             printFactory.informUser(description: "\(name) is lying on the ground!")
         } else {
-            currentHitPoints -= weapon.damage
+            currentHitPoints -= weapon.damage + force
         }
 
         updateStatus()
