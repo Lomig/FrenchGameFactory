@@ -51,7 +51,7 @@ class Player {
     // Recursively retry
     func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole, isSecondAttempt: Bool = false) -> Character {
         if let character = boxedCharacter {
-            printFactory.informUser(description: "\(character.name) attacks!")
+            printFactory.informUser(description: "\(character.name) attacks! (Force: \(String(format: "%02d",character.force)) — Weapon Damage: \(String(format: "%02d",character.weapon.damage)))")
         }
 
         printFactory.changeTitle(with: "\(player.name) is attacking!")
@@ -85,14 +85,22 @@ class Player {
     }
 
     // Add a new character for the player
-    func addCharacter(named name: String) {
-        let new_character = Character(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
-        characters.append(new_character)
+    func addCharacter(named name: String, class heroClass: HeroClass) {
+
+        let newCharacter: Character = createCharacterFromClass(name: name, heroClass: heroClass)
+        characters.append(newCharacter)
     }
 
     // Check if a name is already in use in this team
     func isCharacterNameTaken(_ name: String) -> Bool {
         return characters.first { character in character.name == name } != nil
+    }
+
+    private func createCharacterFromClass(name: String, heroClass: HeroClass) -> Character {
+        switch heroClass {
+        case .barbarian: return Barbarian(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
+        case .tank: return Tank(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
+        }
     }
 }
 

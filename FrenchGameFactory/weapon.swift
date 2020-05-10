@@ -55,17 +55,16 @@ class Weapon {
     // User story: Chests with upgraded weapons
     // We must be able to create weapons that are better than a previous one
     // We can then initialize a weapon with a minimum damage number
-    init(min_damage: Int = 0) {
+    init(minDamage: Int = 0) {
         // User story: Randomness is a required characteristic
         // 55% chances of having a better weapon
-        let isBetterWeapon = Int.random(in: 1...100)
-        if isBetterWeapon > 55 {
+        if Int.random(in: 1...100) > 55 {
             // The damage from a weapon is random (up to 5 damage above or below the previous one)
             // The damage cannot be below 1
-            self.damage = max(1, Int.random(in: min_damage - 5 ... min_damage))
+            self.damage = max(1, Int.random(in: minDamage - 5 ... minDamage))
         } else {
             // The damage from a weapon is random (1 — 5 damage above the previous one)
-            self.damage = Int.random(in: min_damage + 1 ... min_damage + 5)
+            self.damage = Int.random(in: minDamage + 1 ... minDamage + 5)
         }
 
         // Let's have some funny weapon names!

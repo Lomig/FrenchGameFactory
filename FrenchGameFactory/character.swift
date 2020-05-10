@@ -15,24 +15,22 @@ class Character {
     // on the left or the right side of the screen.
     let printFactoryIndex: [Int]
     var weapon: Weapon
-    private let maxHitPoints: Int = 30
-    private var currentHitPoints: Int
-    private let force: Int = 10
+    var maxHitPoints: Int { 30 }
+    var currentHitPoints: Int = 30
+    var force: Int { 10 }
     private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
     init(name: String, printFactoryIndex: [Int]) {
         self.name = name
         self.printFactoryIndex = printFactoryIndex
-        self.currentHitPoints = self.maxHitPoints
         self.weapon = Weapon()
+        self.currentHitPoints = self.maxHitPoints
 
         // Print the newly created character
         updateStatus()
     }
 
-    var isAlive: Bool {
-        return currentHitPoints > 0
-    }
+    var isAlive: Bool { currentHitPoints > 0 }
 
     func attack(_ opponent: Character) {
         opponent.takeDamage(from: weapon, force: force)
@@ -54,7 +52,7 @@ class Character {
     }
 
     func getChest() {
-        let newWeapon = Weapon(min_damage: weapon.damage)
+        let newWeapon = Weapon(minDamage: weapon.damage)
         let newWeaponDescription: String = "It's a \(newWeapon.name.capitalized)!"
         let comparison: String
 
@@ -103,7 +101,7 @@ class Character {
             fromPlayer: printFactoryIndex.first!,
             ofIndex: printFactoryIndex.last!,
             name: name,
-            damage: weapon.damage,
+            damage: weapon.damage + force,
             currentHitPoints: currentHitPoints,
             maxHitPoints: maxHitPoints,
             isAlive: isAlive,

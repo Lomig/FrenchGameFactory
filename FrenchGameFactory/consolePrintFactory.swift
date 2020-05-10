@@ -31,7 +31,7 @@ class ConsolePrintFactory: PrintFactory {
     // Print a question and its prompt at the bottom of the screen.
     // The question may be colorized to remind the User of the active Team.
     func askUser(question: String, colorize: Bool = false) {
-        var color = Color.white
+        var color: Color = .white
         if colorize {
             color = currentPlayer.rawValue == 0 ? .blue : .purple
         }
@@ -49,7 +49,7 @@ class ConsolePrintFactory: PrintFactory {
 
     // Print a title at Top, Center of the screen
     func changeTitle(with title: String, colorize: Bool = false) {
-        var color = Color.white
+        var color: Color = .white
         if colorize {
             color = currentPlayer.rawValue == 0 ? .blue : .purple
         }
@@ -61,9 +61,9 @@ class ConsolePrintFactory: PrintFactory {
 
     // Print the Team name, in a Status Title Bar
     func showPlayerName(forPlayer playerIndex: Int, name: String) {
-        let paddedName = name.padding(toLength: 17, withPad: " ", startingAt: 0)
-        let playerStatus = "\(paddedName) DMG    HP"
-        let color = playerIndex == 0 ? Color.blue : Color.purple
+        let paddedName: String = name.padding(toLength: 17, withPad: " ", startingAt: 0)
+        let playerStatus: String = "\(paddedName) DMG    HP"
+        let color: Color = playerIndex == 0 ? .blue : .purple
 
         players[playerIndex] = colorString(padLine(playerStatus), color: color)
         updateStatus()
@@ -80,21 +80,28 @@ class ConsolePrintFactory: PrintFactory {
     //     - Yellow if selected (is attacker waiting for a target)
     //     - The colour of its team otherwise
     func showCharacter(fromPlayer playerIndex: Int, ofIndex characterIndex: Int, name: String, damage: Int, currentHitPoints: Int, maxHitPoints: Int, isAlive: Bool, isHighlighted: Bool) {
-        let id = characterIndex + 1
-        let paddedName = name.padding(toLength: 16, withPad: " ", startingAt: 0)
-        let paddedDamage = String(format: "%02d", damage)
-        let hitPoints = "\(String(format: "%02d", currentHitPoints))/\(maxHitPoints)"
-        let characterInfo = "\(id) \(paddedName) \(paddedDamage) \(hitPoints)"
+        let id: Int = characterIndex + 1
+        let paddedName: String = name.padding(toLength: 15, withPad: " ", startingAt: 0)
+        let paddedDamage: String = String(format: "%03d", damage)
+        let hitPoints: String = "\(String(format: "%02d", currentHitPoints))/\(maxHitPoints)"
+        let characterInfo: String = "\(id) \(paddedName) \(paddedDamage) \(hitPoints)"
         let color: Color
 
-        if !isAlive {
-            color = .red
-        } else if isHighlighted {
-            color = .yellow
-        } else if playerIndex == 0 {
-            color = .blue
-        } else {
-            color = .purple
+//        if !isAlive {
+//            color = .red
+//        } else if isHighlighted {
+//            color = .yellow
+//        } else if playerIndex == 0 {
+//            color = .blue
+//        } else {
+//            color = .purple
+//        }
+
+        switch (isAlive, isHighlighted, playerIndex) {
+        case (false, _, _): color = .red
+        case (_, true, _): color = .yellow
+        case (_, _, 0): color = .blue
+        default: color = .purple
         }
 
         characters[playerIndex][characterIndex] = colorString(padLine(characterInfo), color: color)

@@ -8,7 +8,7 @@
 
 import Foundation
 
-let game = Game()
+let game: Game = Game()
 
 game.addPlayer("Player 1")
 game.addPlayer("Player 2")

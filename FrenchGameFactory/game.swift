@@ -48,8 +48,11 @@ class Game {
                 heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
             } while heroName == ""
 
+            let heroClass: HeroClass = selectCharacterClass(for: heroName, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
+
+            // Show "Player 1" / "Player 2" as soon as it has at least one character
             printFactory.showPlayerName(forPlayer: newPlayer.printFactoryIndex, name: newPlayer.name)
-            newPlayer.addCharacter(named: heroName)
+            newPlayer.addCharacter(named: heroName, class: heroClass)
         }
         playerTurn.toggle()
     }
@@ -58,10 +61,10 @@ class Game {
     // Check if this name is already in use
     private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
         var heroName: String = ""
-        printFactory.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
+        printFactory.askUser(question: "Enter the name for your hero #\(i): (15 characters max)", colorize: true)
 
         if let input = readLine() {
-            heroName = input.capitalized
+            heroName = String(input.prefix(15)).capitalized
         }
 
         if isCharacterNameTaken(heroName) {
@@ -70,6 +73,25 @@ class Game {
         }
 
         return heroName
+    }
+
+    // Get a Character Class from the player
+    private func selectCharacterClass(for name: String, forPlayer player: PlayerTurn) -> HeroClass {
+        let classExplanation: [String] = [
+            "1 - Tank: has more HP, but does less damage.",
+            "2 - Barbarian: has less HP, but does more damage."
+        ]
+        printFactory.informUser(description: classExplanation)
+        printFactory.askUser(question: "Select a class for \(name) (1-2):", colorize: true)
+
+        guard let input = Int(readLine()!), input > 0, input <= 2 else {
+            printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
+            return selectCharacterClass(for: name, forPlayer: player)
+        }
+
+        // Delete class descriptions
+        printFactory.informUser(description: ["", "", ""])
+        return HeroClass(rawValue: input)!
     }
 
     // Check if a Character name is already in Use
