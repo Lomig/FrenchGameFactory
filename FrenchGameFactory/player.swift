@@ -33,7 +33,7 @@ class Player {
     // Main Action between two characters
     func play(against opponent: Player) {
         // Choose an attacker to play with
-        let attacker = chooseCharacter(attackBy: self, role: .attacker)
+        let attacker: Character = chooseCharacter(attackBy: self, role: .attacker)
         attacker.updateStatus(isHighlighted: true)
 
         // The attacker may find a chest
@@ -42,7 +42,7 @@ class Player {
         if Int.random(in: 1...100) <= 40 { attacker.getChest() }
 
         // Choose a target to play against
-        let target = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)
+        let target: Character = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)
         attacker.attack(target)
     }
 
@@ -59,28 +59,24 @@ class Player {
 
 
         // Get player input to select a character
-        if let chosenValue = Int(readLine()!) {
-            // The value entered by the user should bet between 0 and the number of characters
-            if chosenValue > 0 && chosenValue <= Player.maxNumberOfCharacters {
-                // The chosen character must be alive to be selected
-                // If it's the case, we return it
-                if characters[chosenValue - 1].isAlive {
-                    if isSecondAttempt {
-                        printFactory.informUser(description: "Thanks for retrying, valid character chosen!", color: .green)
-                    }
-                    return characters[chosenValue - 1]
-                }
-
-                // Error message if the character is not alive
-                printFactory.informUser(description: "This character is out of combat :(", color: .red)
-            }
+        guard let chosenValue = Int(readLine()!), chosenValue > 0, chosenValue <= Player.maxNumberOfCharacters else {
+            // Error message if the input cannot lead to a character selection
+            printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
+            return chooseCharacter(attackBy: player, role: role, isSecondAttempt: true)
         }
 
-        // Error message if the input cannot lead to a character selection
-        printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
 
-        // Pure recursive call as the last line
-        // I don't know if Swift does TCO, but it does not hurt to do as if it was the case.
+        // The chosen character must be alive to be selected
+        // If it's the case, we return it
+        if characters[chosenValue - 1].isAlive {
+            if isSecondAttempt {
+                printFactory.informUser(description: "Retry successful, valid character chosen!", color: .green)
+            }
+            return characters[chosenValue - 1]
+        }
+
+        // Error message if the character is not alive
+        printFactory.informUser(description: "This character is out of combat, please try again :(", color: .red)
         return chooseCharacter(attackBy: player, role: role, isSecondAttempt: true)
     }
 

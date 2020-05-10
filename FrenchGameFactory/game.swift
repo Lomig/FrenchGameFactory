@@ -32,7 +32,7 @@ class Game {
 
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
-        let newPlayer = Player(name: playerName, printFactoryIndex: players.count)
+        let newPlayer: Player = Player(name: playerName, printFactoryIndex: players.count)
 
         // Storing the player turn in the Print Factory
         // Used there to chose the color to display for each team
@@ -43,11 +43,7 @@ class Game {
         players.append(newPlayer)
 
         (1...Player.maxNumberOfCharacters).forEach { i in
-            var heroName: String
-            repeat {
-                heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
-            } while heroName == ""
-
+            let heroName: String = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
             let heroClass: HeroClass = selectCharacterClass(for: heroName, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
 
             // Show "Player 1" / "Player 2" as soon as it has at least one character
@@ -60,16 +56,13 @@ class Game {
     // Get a Character Name from the player
     // Check if this name is already in use
     private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
-        var heroName: String = ""
         printFactory.askUser(question: "Enter the name for your hero #\(i): (15 characters max)", colorize: true)
+        guard let input = readLine(), input != "" else { return selectCharacterName(forHero: i, forPlayer: player) }
 
-        if let input = readLine() {
-            heroName = String(input.prefix(15)).capitalized
-        }
-
+        let heroName = String(input.prefix(15)).capitalized
         if isCharacterNameTaken(heroName) {
             printFactory.informUser(description: "\(heroName) is already taken :(")
-            return selectCharacterName(forHero: i, forPlayer: player )
+            return selectCharacterName(forHero: i, forPlayer: player)
         }
 
         return heroName

@@ -52,7 +52,7 @@ class Character {
     }
 
     func getChest() {
-        let newWeapon = Weapon(minDamage: weapon.damage)
+        let newWeapon: Weapon = Weapon(minDamage: weapon.damage)
         let newWeaponDescription: String = "It's a \(newWeapon.name.capitalized)!"
         let comparison: String
 

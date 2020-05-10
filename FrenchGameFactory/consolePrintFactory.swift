@@ -131,13 +131,13 @@ class ConsolePrintFactory: PrintFactory {
         lines[3] = padLine("Woot! Just before their attack,", lineType: .treasureLine)
         lines[4] = padLine("\(characterName) found a treasure!", lineType: .treasureLine)
 
-        let cutName = cut(content[0], lineType: .treasureLine)
+        let cutName: [String] = cut(content[0], lineType: .treasureLine)
         lines[6] = colorString(padLine(cutName[0], lineType: .treasureLine), color: .red)
         lines[7] = colorString(padLine(cutName[1], lineType: .treasureLine), color: .red)
 
         lines[9] = padLine("(Damage: \(content[1]))", lineType: .treasureLine)
 
-        let cutComparison = cut(content[2], lineType: .fullLine)
+        let cutComparison: [String] = cut(content[2], lineType: .fullLine)
         lines[11] = padLine(cutComparison[0], lineType: .fullLine)
         lines[12] = padLine(cutComparison[1], lineType: .fullLine)
 
@@ -195,7 +195,7 @@ class ConsolePrintFactory: PrintFactory {
     // Update the Description Section
     // A new description "pushes" former ones up
     private func updateDescription(with description: String, color boxedColor: Color?) {
-        let color = boxedColor ?? .white
+        let color: Color = boxedColor ?? .white
 
             lines[9] = lines[10]
             lines[10] = lines[11]
@@ -231,12 +231,12 @@ class ConsolePrintFactory: PrintFactory {
     private func cut(_ string: String, lineType: LineType) -> [String] {
         if string.count <= lineType.rawValue { return [string, ""] }
 
-        let lastSpaceOffset = (1...lineType.rawValue).reversed().first { offset in
+        let lastSpaceOffset: Int = (1...lineType.rawValue).reversed().first { offset in
             let index: String.Index = string.index(string.startIndex, offsetBy: offset)
             return string[index...index] == " "
-        }
+        }!
 
-        let lastSpaceIndex: String.Index = string.index(string.startIndex, offsetBy: lastSpaceOffset! + 1)
+        let lastSpaceIndex: String.Index = string.index(string.startIndex, offsetBy: lastSpaceOffset + 1)
 
         return [String(string[..<lastSpaceIndex]), String(string[lastSpaceIndex...])]
     }
@@ -248,8 +248,8 @@ class ConsolePrintFactory: PrintFactory {
     private func centerLine(_ line: String) -> String {
         // The available space is 58 characters
         // Centering text means splitting what's left in half
-        let paddingSize = (58 - line.count) / 2
-        let leftPadding = String(repeating: " ", count: paddingSize)
+        let paddingSize: Int = (58 - line.count) / 2
+        let leftPadding: String = String(repeating: " ", count: paddingSize)
         return (leftPadding + line).padding(toLength: 58, withPad: " ", startingAt: 0)
     }
 

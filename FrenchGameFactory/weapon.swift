@@ -9,7 +9,7 @@
 import Foundation
 
 class Weapon {
-    private static let weaponNames = [
+    private static let weaponNames: [String] = [
         "sword",
         "axe",
         "shovel",
@@ -21,7 +21,7 @@ class Weapon {
         "smelly cheese",
         "ruler",
     ]
-    private static let weaponPrefix = [
+    private static let weaponPrefix: [String] = [
         "Rusty",
         "Golden",
         "Devilish",
@@ -36,7 +36,7 @@ class Weapon {
         "Borrowed",
         "Quarantined",
     ]
-    private static let weaponSuffix = [
+    private static let weaponSuffix: [String] = [
         " of the mighty",
         " of the beast",
         " of the devot",
