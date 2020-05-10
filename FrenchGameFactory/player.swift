@@ -21,13 +21,11 @@ class Player {
 
     var isWiped: Bool {
         return characters.first { character in character.isAlive } == nil
-
     }
 
     init(name: String, printFactoryIndex: Int) {
         self.name = name
         self.printFactoryIndex = printFactoryIndex
-
     }
 
     // Main Action between two characters
@@ -36,8 +34,7 @@ class Player {
         let attacker: Character = chooseCharacter(attackBy: self, role: .attacker)
         attacker.updateStatus(isHighlighted: true)
 
-        // The attacker may find a chest
-        // 40% probability
+        // The attacker may find a chest with 40% probability
         // We do it before attacking for the flow of the game inside the console
         if Int.random(in: 1...100) <= 40 { attacker.getChest() }
 
@@ -46,10 +43,22 @@ class Player {
         attacker.attack(target)
     }
 
+    // Add a new character for the player
+    func addCharacter(named name: String, class heroClass: HeroClass) {
+
+        let newCharacter: Character = createCharacterFromClass(name: name, heroClass: heroClass)
+        characters.append(newCharacter)
+    }
+
+    // Check if a name is already in use in this team
+    func isCharacterNameTaken(_ name: String) -> Bool {
+        return characters.first { character in character.name == name } != nil
+    }
+
     // Choose character from the User input.
     // If the input is not a number within the index, or if the character selected is already dead
     // Recursively retry
-    func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole, isSecondAttempt: Bool = false) -> Character {
+    private func chooseCharacter(attackBy player: Player, with boxedCharacter: Character? = nil, role: CharacterRole, isSecondAttempt: Bool = false) -> Character {
         if let character = boxedCharacter {
             printFactory.informUser(description: "\(character.name) attacks! (Force: \(String(format: "%02d",character.force)) — Weapon Damage: \(String(format: "%02d",character.weapon.damage)))")
         }
@@ -78,18 +87,6 @@ class Player {
         // Error message if the character is not alive
         printFactory.informUser(description: "This character is out of combat, please try again :(", color: .red)
         return chooseCharacter(attackBy: player, role: role, isSecondAttempt: true)
-    }
-
-    // Add a new character for the player
-    func addCharacter(named name: String, class heroClass: HeroClass) {
-
-        let newCharacter: Character = createCharacterFromClass(name: name, heroClass: heroClass)
-        characters.append(newCharacter)
-    }
-
-    // Check if a name is already in use in this team
-    func isCharacterNameTaken(_ name: String) -> Bool {
-        return characters.first { character in character.name == name } != nil
     }
 
     private func createCharacterFromClass(name: String, heroClass: HeroClass) -> Character {

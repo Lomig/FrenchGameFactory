@@ -73,7 +73,7 @@ class ConsolePrintFactory: PrintFactory {
 
     // Print a character in the form of:
     //     INDEX NAME       DAMAGE  HP/TOTAL_HP
-    // A name that is too long will be but
+    // A name that is too long will be cut
     // Number have leading 0s
     // We colorize the line to match the current status:
     //     - Red if the character is dead
@@ -87,16 +87,8 @@ class ConsolePrintFactory: PrintFactory {
         let characterInfo: String = "\(id) \(paddedName) \(paddedDamage) \(hitPoints)"
         let color: Color
 
-//        if !isAlive {
-//            color = .red
-//        } else if isHighlighted {
-//            color = .yellow
-//        } else if playerIndex == 0 {
-//            color = .blue
-//        } else {
-//            color = .purple
-//        }
 
+        // if ... else if ... else was cumbersome, switching to pattern matching, functional style!
         switch (isAlive, isHighlighted, playerIndex) {
         case (false, _, _): color = .red
         case (_, true, _): color = .yellow
@@ -124,6 +116,8 @@ class ConsolePrintFactory: PrintFactory {
         display()
     }
 
+    // Display the Chest drawing with the message
+    // Containing what's in the Chest
     func openChest(for characterName: String, content: [String]) {
         setChestDisplay()
         updateTitle(with: "\(characterName) found a treasure!", color: .yellow)
@@ -208,11 +202,15 @@ class ConsolePrintFactory: PrintFactory {
         lines[14] = padLine(">", lineType: .fullLine)
     }
 
+    // Save what's on display
+    // Display the Treasure display instead
     private func setChestDisplay() {
         backupLines = lines
         resetDisplayLinesForChest()
     }
 
+    // Erase all previous text, then use smaller empty lines to let some space for
+    // the template with the nice Chest drawing
     private func resetDisplayLinesForChest() {
         lines = Array(repeating: String(repeating: " ", count: 58), count: 15)
 
@@ -228,6 +226,10 @@ class ConsolePrintFactory: PrintFactory {
     //---------------------------------------------------------------------------
 
 
+    // If a line is too long, we want to cut it.
+    // For aesthetic reasons, we want to keep the first line as long as possible.
+    // We find the last character that can fit on the line (according to its LineType giving its length)
+    // Then we cut the string on the first space before this character
     private func cut(_ string: String, lineType: LineType) -> [String] {
         if string.count <= lineType.rawValue { return [string, ""] }
 
@@ -241,6 +243,9 @@ class ConsolePrintFactory: PrintFactory {
         return [String(string[..<lastSpaceIndex]), String(string[lastSpaceIndex...])]
     }
 
+    // To place the End of Line decorators at the right place, we need to pad each line of text with white spaces
+    // The padding depends on the available space, different according to the context.
+    // This context is represented by an enum, LineType.
     private func padLine(_ line: String, lineType: LineType = .halfLine) -> String {
         return line.padding(toLength: lineType.rawValue, withPad: " ", startingAt: 0)
     }

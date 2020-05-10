@@ -9,18 +9,18 @@
 import Foundation
 
 class Game {
-    var players: [Player] = []
-    var playerTurn: PlayerTurn = .player1
+    private var players: [Player] = []
+    private var playerTurn: PlayerTurn = .player1
     private var printFactory: PrintFactory = ConsolePrintFactory.shared
+    private var numberOfTurn: Int = 0
 
-    var gameOver: Bool {
-        return players.first { player in player.isWiped } != nil
-    }
+    private var gameOver: Bool { players.first { player in player.isWiped } != nil }
 
 
     // Main Gameplay Loop
     func start() {
         repeat {
+            numberOfTurn += 1
             printFactory.currentPlayer = playerTurn
             players[playerTurn.currentPlayer()].play(against: players[playerTurn.nextPlayer()])
 
@@ -77,6 +77,7 @@ class Game {
         printFactory.informUser(description: classExplanation)
         printFactory.askUser(question: "Select a class for \(name) (1-2):", colorize: true)
 
+        // Retry selection if the User input is not correct
         guard let input = Int(readLine()!), input > 0, input <= 2 else {
             printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
             return selectCharacterClass(for: name, forPlayer: player)
@@ -105,7 +106,7 @@ class Game {
         }
 
         let name: String = player1Wiped ? players.last!.name : players.first!.name
-        printFactory.informUser(description: ["", "Victory for \(name)!", ""])
+        printFactory.informUser(description: ["", "Victory for \(name)!", "They took \(numberOfTurn) to accomplish this deed."])
     }
 }
 

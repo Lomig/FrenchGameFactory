@@ -38,14 +38,15 @@ class Character {
     }
 
     func takeDamage(from weapon: Weapon, force: Int) {
+        let totalDamage = weapon.damage + force
         // Negative hit points are impossible
         // If the damage is greater than the remaining hit points, hit points are set to 0
-        printFactory.informUser(description: "\(name) has been hit for \("damage".pluralize(number: weapon.damage)).")
-        if weapon.damage + force >= currentHitPoints {
+        printFactory.informUser(description: "\(name) has been hit for \("damage".pluralize(number: totalDamage)).")
+        if totalDamage >= currentHitPoints {
             currentHitPoints = 0
             printFactory.informUser(description: "\(name) is lying on the ground!")
         } else {
-            currentHitPoints -= weapon.damage + force
+            currentHitPoints -= totalDamage
         }
 
         updateStatus()
@@ -75,7 +76,7 @@ class Character {
     }
 
     // Change the character weapon if the users wants to
-    func tradeWeapon(with weapon: Weapon) {
+    private func tradeWeapon(with weapon: Weapon) {
         if let confirmation = readLine() {
             if ["yes", "y"].contains(confirmation.lowercased()) {
                 self.weapon = weapon
