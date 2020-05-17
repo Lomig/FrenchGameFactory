@@ -46,7 +46,12 @@ class Player {
     // Add a new character for the player
     func addCharacter(named name: String, class heroClass: HeroClass) {
 
-        let newCharacter: Character = createCharacterFromClass(name: name, heroClass: heroClass)
+        // Using Metaprogramming
+        // We get the name of the Swift class from the name of the Hero Class
+        // To avoid unnecessary case switch for all types of Hero Classes
+        // And to be agnostic to Hero Classes names and numbers.
+        let heroClassClass = NSClassFromString("FrenchGameFactory.\(String(describing: heroClass))") as! Character.Type
+        let newCharacter: Character = heroClassClass.init(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
         characters.append(newCharacter)
     }
 
@@ -87,13 +92,6 @@ class Player {
         // Error message if the character is not alive
         printFactory.informUser(description: "This character is out of combat, please try again :(", color: .red)
         return chooseCharacter(attackBy: player, role: role, isSecondAttempt: true)
-    }
-
-    private func createCharacterFromClass(name: String, heroClass: HeroClass) -> Character {
-        switch heroClass {
-        case .barbarian: return Barbarian(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
-        case .tank: return Tank(name: name, printFactoryIndex: [printFactoryIndex, characters.count])
-        }
     }
 }
 

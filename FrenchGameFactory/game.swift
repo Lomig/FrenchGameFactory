@@ -70,15 +70,23 @@ class Game {
 
     // Get a Character Class from the player
     private func selectCharacterClass(for name: String, forPlayer player: PlayerTurn) -> HeroClass {
-        let classExplanation: [String] = [
-            "1 - Tank: has more HP, but does less damage.",
-            "2 - Barbarian: has less HP, but does more damage."
-        ]
+        var classExplanation: [String] = []
+
+        // Metaprogramming Exercise!
+        // For each enum type, we get the name of the enum
+        // From this name, we get the Swift class from that name to use methods from this Swift Class
+        // className to get the internal name of the Character Class
+        // classDescription to get the internal description of the Character Class
+        HeroClass.allCases.forEach { heroClass in
+            let heroClassClass = NSClassFromString("FrenchGameFactory.\(String(describing: heroClass))") as! Character.Type
+            classExplanation.append("\(heroClass.rawValue) - \(heroClassClass.className): \(heroClassClass.classDescription)")
+        }
+
         printFactory.informUser(description: classExplanation)
-        printFactory.askUser(question: "Select a class for \(name) (1-2):", colorize: true)
+        printFactory.askUser(question: "Select a class for \(name) (1-\(HeroClass.allCases.count)):", colorize: true)
 
         // Retry selection if the User input is not correct
-        guard let input = Int(readLine()!), input > 0, input <= 2 else {
+        guard let input = Int(readLine()!), input > 0, input <= HeroClass.allCases.count else {
             printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
             return selectCharacterClass(for: name, forPlayer: player)
         }

@@ -18,9 +18,13 @@ class Character {
     var maxHitPoints: Int { 30 }
     var currentHitPoints: Int = 30
     var force: Int { 10 }
+
+    class var className: String { "" }
+    class var classDescription: String { "" }
+
     private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
-    init(name: String, printFactoryIndex: [Int]) {
+    required init(name: String, printFactoryIndex: [Int]) {
         self.name = name
         self.printFactoryIndex = printFactoryIndex
         self.weapon = Weapon()
