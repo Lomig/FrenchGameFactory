@@ -9,21 +9,20 @@
 import Foundation
 
 class Game {
-    var players: [Player] = []
-    var playerTurn: PlayerTurn = .player1
+    private var players: [Player] = []
+    private var playerTurn: PlayerTurn = .player1
+    private var printFactory: PrintFactory = ConsolePrintFactory.shared
+    private var numberOfTurn: Int = 0
 
-    var gameOver: Bool {
-        return players.first { player in player.isWiped } != nil
-    }
+    private var gameOver: Bool { players.first { player in player.isWiped } != nil }
 
 
     // Main Gameplay Loop
     func start() {
         repeat {
-            PrintFactory.shared.currentPlayer = playerTurn
-            let attackerID = playerTurn.rawValue
-            let defenderID = (playerTurn.rawValue + 1) % 2
-            players[attackerID].play(against: players[defenderID])
+            numberOfTurn += 1
+            printFactory.currentPlayer = playerTurn
+            players[playerTurn.currentPlayer()].play(against: players[playerTurn.nextPlayer()])
 
             playerTurn.toggle()
         } while !gameOver
@@ -33,19 +32,23 @@ class Game {
 
     // Add a player with 3 characters
     func addPlayer(_ playerName: String) {
-        let newPlayer = Player(name: playerName, index: players.count)
-        PrintFactory.shared.currentPlayer = playerTurn
-        PrintFactory.shared.changeTitle(with: "\(playerName)'s team")
+        let newPlayer: Player = Player(name: playerName, printFactoryIndex: players.count)
+
+        // Storing the player turn in the Print Factory
+        // Used there to chose the color to display for each team
+        // Blue for Player1, Purple for Player2
+        printFactory.currentPlayer = playerTurn
+        printFactory.changeTitle(with: "\(playerName)'s team")
+
         players.append(newPlayer)
 
-        (1...3).forEach { i in
-            var heroName: String
-            repeat {
-                heroName = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.index)!)
-            } while heroName == "" || isCharacterNameTaken(heroName)
+        (1...Player.maxNumberOfCharacters).forEach { i in
+            let heroName: String = selectCharacterName(forHero: i, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
+            let heroClass: HeroClass = selectCharacterClass(for: heroName, forPlayer: PlayerTurn(rawValue: newPlayer.printFactoryIndex)!)
 
-            PrintFactory.shared.showPlayerName(forPlayer: newPlayer.index, name: newPlayer.name)
-            newPlayer.addCharacter(named: heroName)
+            // Show "Player 1" / "Player 2" as soon as it has at least one character
+            printFactory.showPlayerName(forPlayer: newPlayer.printFactoryIndex, name: newPlayer.name)
+            newPlayer.addCharacter(named: heroName, class: heroClass)
         }
         playerTurn.toggle()
     }
@@ -53,19 +56,36 @@ class Game {
     // Get a Character Name from the player
     // Check if this name is already in use
     private func selectCharacterName(forHero i: Int, forPlayer player: PlayerTurn) -> String {
-        var heroName: String = ""
-        PrintFactory.shared.askUser(question: "Enter the name for your hero #\(i)", colorize: true)
+        printFactory.askUser(question: "Enter the name for your hero #\(i): (15 characters max)", colorize: true)
+        guard let input = readLine(), input != "" else { return selectCharacterName(forHero: i, forPlayer: player) }
 
-        if let input = readLine(strippingNewline: true) {
-            heroName = input.capitalized
-        }
-
+        let heroName = String(input.prefix(15)).capitalized
         if isCharacterNameTaken(heroName) {
-            PrintFactory.shared.informUser(description: "\(heroName) is already taken :(")
-            return selectCharacterName(forHero: i, forPlayer: player )
+            printFactory.informUser(description: "\(heroName) is already taken :(")
+            return selectCharacterName(forHero: i, forPlayer: player)
         }
 
         return heroName
+    }
+
+    // Get a Character Class from the player
+    private func selectCharacterClass(for name: String, forPlayer player: PlayerTurn) -> HeroClass {
+        let classExplanation: [String] = [
+            "1 - Tank: has more HP, but does less damage.",
+            "2 - Barbarian: has less HP, but does more damage."
+        ]
+        printFactory.informUser(description: classExplanation)
+        printFactory.askUser(question: "Select a class for \(name) (1-2):", colorize: true)
+
+        // Retry selection if the User input is not correct
+        guard let input = Int(readLine()!), input > 0, input <= 2 else {
+            printFactory.informUser(description: "This is not a valid input. Retrying...", color: .yellow)
+            return selectCharacterClass(for: name, forPlayer: player)
+        }
+
+        // Delete class descriptions
+        printFactory.informUser(description: ["", "", ""])
+        return HeroClass(rawValue: input)!
     }
 
     // Check if a Character name is already in Use
@@ -79,14 +99,14 @@ class Game {
         let player1Wiped: Bool = players.first!.isWiped
         let player2Wiped: Bool = players.last!.isWiped
 
-        PrintFactory.shared.askUser(false)
+        printFactory.hideQuestionSection()
 
         if player1Wiped && player2Wiped {
-            return PrintFactory.shared.informUser(description: ["", "Tie! Noone won this round!", ""])
+            return printFactory.informUser(description: ["", "Tie! Noone won this round!", ""])
         }
 
         let name: String = player1Wiped ? players.last!.name : players.first!.name
-        PrintFactory.shared.informUser(description: ["", "Victory for \(name)!", ""])
+        printFactory.informUser(description: ["", "Victory for \(name)!", "They took \(numberOfTurn) to accomplish this deed."])
     }
 }
 
@@ -97,6 +117,17 @@ enum PlayerTurn: Int {
         switch(self) {
         case .player1: self = .player2
         case .player2: self = .player1
+        }
+    }
+
+    func currentPlayer() -> Int {
+        return self.rawValue
+    }
+
+    func nextPlayer() -> Int {
+        switch self {
+        case .player1: return 1
+        case .player2: return 0
         }
     }
 }

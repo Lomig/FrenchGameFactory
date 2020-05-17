@@ -8,13 +8,13 @@
 
 import Foundation
 
-let game = Game()
+let game: Game = Game()
 
 game.addPlayer("Player 1")
 game.addPlayer("Player 2")
 game.start()
 
 
-// Return gracefullt the cursor bottom left of the screen
+// Return gracefully the cursor bottom left of the screen
 print("\u{1B}[10E")
 
