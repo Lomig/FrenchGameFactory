@@ -13,7 +13,7 @@ class Character {
 
     // printFactoryIndex is used by PrintFactory to know if it should print the Player and its Characters
     // on the left or the right side of the screen.
-    let printFactoryIndex: [Int]
+    private let printFactoryIndex: [Int]
     var weapon: Weapon
     var maxHitPoints: Int { 30 }
     var currentHitPoints: Int = 30
@@ -85,8 +85,8 @@ class Character {
             if ["yes", "y"].contains(confirmation.lowercased()) {
                 self.weapon = weapon
                 printFactory.closeChest()
-                printFactory.informUser(description: ["\(name) found a treasure...", "\(name) has changed his weapon!"])
                 updateStatus()
+                printFactory.informUser(description: ["\(name) found a treasure...", "\(name) has changed his weapon!"])
                 return
             } else if ["no", "n"].contains(confirmation.lowercased()){
                 printFactory.closeChest()

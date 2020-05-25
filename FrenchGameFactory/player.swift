@@ -16,7 +16,7 @@ class Player {
     // printFactoryIndex is used by PrintFactory to know if it should print the Player and its Characters
     // on the left or the right side of the screen.
     let printFactoryIndex: Int
-    var characters: [Character] = []
+    private var characters: [Character] = []
     private let printFactory: PrintFactory = ConsolePrintFactory.shared
 
     var isWiped: Bool {
@@ -34,9 +34,9 @@ class Player {
         let attacker: Character = chooseCharacter(attackBy: self, role: .attacker)
         attacker.updateStatus(isHighlighted: true)
 
-        // The attacker may find a chest with 40% probability
+        // The attacker may find a chest with 30% probability
         // We do it before attacking for the flow of the game inside the console
-        if Int.random(in: 1...100) <= 40 { attacker.getChest() }
+        if Int.random(in: 1...100) <= 30 { attacker.getChest() }
 
         // Choose a target to play against
         let target: Character = opponent.chooseCharacter(attackBy: self, with: attacker, role: .target)

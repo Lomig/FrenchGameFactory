@@ -21,6 +21,10 @@ class Game {
     func start() {
         repeat {
             numberOfTurn += 1
+
+            // Storing the player turn in the Print Factory
+            // Used there to chose the color to display for each team
+            // Blue for Player1, Purple for Player2
             printFactory.currentPlayer = playerTurn
             players[playerTurn.currentPlayer()].play(against: players[playerTurn.nextPlayer()])
 
